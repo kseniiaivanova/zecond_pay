@@ -1,12 +1,8 @@
 // https://prettier.io/docs/en/options.html
 /** @type {import('prettier').RequiredOptions} */
 module.exports = {
-  trailingComma: 'es5',
-  bracketSpacing: true,
-  tabWidth: 2,
-  semi: false,
-  singleQuote: true,
   arrowParens: 'always',
+  bracketSpacing: true,
   overrides: [
     {
       files: 'Routes.*',
@@ -15,4 +11,9 @@ module.exports = {
       },
     },
   ],
+  printWidth: 120,
+  semi: false,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'es5',
 }
