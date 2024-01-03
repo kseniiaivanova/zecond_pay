@@ -19,5 +19,3 @@ handlePrismaLogging({
   logger,
   logLevels: ['info', 'warn', 'error'],
 })
-export { PrismaClient }
-

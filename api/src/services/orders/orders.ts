@@ -2,18 +2,19 @@ import type { QueryResolvers, MutationResolvers, OrderRelationResolvers } from '
 
 import { db } from 'src/lib/db'
 
-export const orders: QueryResolvers['orders'] = () => {
+export const listOrders: QueryResolvers['listOrders'] = () => {
   return db.order.findMany()
 }
 
-export const order: QueryResolvers['order'] = ({ id }) => {
-  return db.order.findUnique({
+export const getOrder: QueryResolvers['getOrder'] = async ({ id }) => {
+  const order = await db.order.findUnique({
     where: { id },
   })
+  return order
 }
 
-export const createOrder: MutationResolvers['createOrder'] = ({ input }) => {
-  return db.order.create({
+export const createOrder: MutationResolvers['createOrder'] = async ({ input }) => {
+  return await db.order.create({
     data: input,
   })
 }
