@@ -1,5 +1,6 @@
 import type { QueryResolvers, MutationResolvers, PaymentRelationResolvers } from 'types/graphql'
 
+
 import { db } from 'src/lib/db'
 
 export const payments: QueryResolvers['payments'] = () => {

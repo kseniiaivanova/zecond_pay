@@ -3,22 +3,20 @@ export const schema = gql`
     id: String!
     status: String!
     amount: Float!
-    paymentId: String!
-    payment: Payment!
+    paymentId: String
+    payment: Payment
     orderedAt: DateTime!
     paidAt: DateTime
   }
 
   type Query {
-    orders: [Order!]! @requireAuth
-    order(id: String!): Order @requireAuth
+    listOrders: [Order!]! @requireAuth
+    getOrder(id: String!): Order @requireAuth
   }
 
   input CreateOrderInput {
     status: String!
     amount: Float!
-    paymentId: String!
-    orderedAt: DateTime!
     paidAt: DateTime
   }
 
