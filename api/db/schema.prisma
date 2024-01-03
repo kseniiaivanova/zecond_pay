@@ -16,8 +16,8 @@ model Order {
   id        String    @id @default(cuid()) @map("_id")
   status    String
   amount    Float
-  paymentId String    @unique
-  payment   Payment   @relation(fields: [paymentId], references: [id])
+  paymentId String?   @unique
+  payment   Payment?  @relation(fields: [paymentId], references: [id])
   orderedAt DateTime  @default(now()) @map("ordered_at")
   paidAt    DateTime? @map("paid_at")
 

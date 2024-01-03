@@ -1,6 +1,7 @@
 import type { QueryResolvers, MutationResolvers, OrderRelationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { RedwoodGraphQLError } from '@redwoodjs/graphql-server'
 
 export const listOrders: QueryResolvers['listOrders'] = () => {
   return db.order.findMany()
@@ -14,10 +15,16 @@ export const getOrder: QueryResolvers['getOrder'] = async ({ id }) => {
 }
 
 export const createOrder: MutationResolvers['createOrder'] = async ({ input }) => {
-  return await db.order.create({
-    data: input,
-  })
-}
+  try {
+    const order = await db.order.create({
+      data: input,
+    });
+    return order;
+  } catch (error) {
+   throw new RedwoodGraphQLError('Create offer failed', { code: error.message })
+  }
+};
+
 
 export const updateOrder: MutationResolvers['updateOrder'] = ({ id, input }) => {
   return db.order.update({

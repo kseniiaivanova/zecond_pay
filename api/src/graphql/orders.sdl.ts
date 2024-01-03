@@ -3,8 +3,8 @@ export const schema = gql`
     id: String!
     status: String!
     amount: Float!
-    paymentId: String!
-    payment: Payment!
+    paymentId: String
+    payment: Payment
     orderedAt: DateTime!
     paidAt: DateTime
   }
@@ -17,7 +17,6 @@ export const schema = gql`
   input CreateOrderInput {
     status: String!
     amount: Float!
-    paymentId: String!
     orderedAt: DateTime!
     paidAt: DateTime
   }
