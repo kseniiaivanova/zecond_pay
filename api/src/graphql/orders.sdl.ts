@@ -17,7 +17,6 @@ export const schema = gql`
   input CreateOrderInput {
     status: String!
     amount: Float!
-    orderedAt: DateTime!
     paidAt: DateTime
   }
 
