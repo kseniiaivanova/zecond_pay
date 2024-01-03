@@ -8,10 +8,15 @@ import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
+  healthCheckId: 'api-gateway',
   loggerConfig: { logger, options: {} },
   directives,
   sdls,
   services,
+  cors: {
+    origin: '*',
+    credentials: true,
+  },
   onException: () => {
     // Disconnect from your database with an unhandled exception.
     db.$disconnect()
