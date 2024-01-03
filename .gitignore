@@ -20,4 +20,9 @@ api/src/lib/generateGraphiQLHeader.*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-*.pem
+
+
+localhost-key.pem
+localhost.pem
+
+

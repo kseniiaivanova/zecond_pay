@@ -7,7 +7,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "6.5.0"
+    "@redwoodjs/core": "6.5.1"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -20,5 +20,16 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.7.0"
+  "packageManager": "yarn@3.7.0",
+  "dependencies": {
+    "@chakra-ui/react": "latest",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@prisma/client": "5.7.1",
+    "@redwoodjs/api": "^6.5.1",
+    "axios": "^1.6.2",
+    "framer-motion": "^10.16.15",
+    "mongodb": "^6.3.0",
+    "prisma": "5.7.1"
+  }
 }
