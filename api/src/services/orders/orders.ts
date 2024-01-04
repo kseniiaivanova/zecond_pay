@@ -11,6 +11,9 @@ export const getOrder: QueryResolvers['getOrder'] = async ({ id }) => {
   const order = await db.order.findUnique({
     where: { id },
   })
+  if (!order) {
+    throw new Error(`Order with ID ${id} not found`);
+  }
   return order
 }
 
