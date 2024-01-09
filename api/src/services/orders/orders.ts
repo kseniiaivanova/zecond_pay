@@ -12,7 +12,7 @@ export const getOrder: QueryResolvers['getOrder'] = async ({ id }) => {
     where: { id },
   })
   if (!order) {
-    throw new Error(`Order with ID ${id} not found`);
+    return null
   }
   return order
 }

@@ -1,15 +1,16 @@
 import { Box, Flex, Spinner } from '@chakra-ui/react'
-import { Link, routes } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { useEffect, useState } from 'react'
-import GetOrderForm from 'src/components/GetOrderForm/GetOrderForm'
+import React, { useContext, useState } from 'react'
 
 import { OrderInputValue } from 'src/types/orderInput'
 import { GET_ORDER } from 'src/apollo/orders'
 import { useQuery } from '@apollo/client'
-import { useToast } from 'src/components/Toaster'
+import GetOrderForm from 'src/components/GetOrderForm/GetOrderForm'
 
 const MainPage = () => {
+  //const { setOrderStatus } = useContext(OrderContext)
+
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [value, setValue] = useState<OrderInputValue | null>(null)
@@ -22,9 +23,26 @@ const MainPage = () => {
   } = useQuery(GET_ORDER, {
     variables: { id: value?.orderId || '' },
     skip: !value || !value.orderId,
+
     onError: (error) => {
-      errorToast('id not found, try again!')
+      errorToast('Something went wrong')
       setLoading(false)
+    },
+
+    onCompleted: (data) => {
+      if (data && data.getOrder) {
+        setValue(data.getOrder)
+        setLoading(false)
+        setFormSubmitted(true)
+
+        // Navigate to the order page
+        navigate(
+          routes.order({ orderId: data.getOrder.id, status: data.getOrder.status, amount: data.getOrder.amount })
+        )
+      } else {
+        errorToast('ID not found, try again!')
+        setLoading(false)
+      }
     },
   })
 
@@ -32,18 +50,6 @@ const MainPage = () => {
     setValue(value)
     setFormSubmitted(true)
   }
-
-  useEffect(() => {
-    setLoading(queryLoading)
-  }, [queryLoading])
-
-  useEffect(() => {
-    if (data && data.getOrder) {
-      setValue(data.getOrder)
-      setLoading(false)
-      setFormSubmitted(true)
-    }
-  }, [data])
 
   return (
     <>
@@ -57,3 +63,6 @@ const MainPage = () => {
 }
 
 export default MainPage
+function useToast(): { errorToast: any } {
+  throw new Error('Function not implemented.')
+}
