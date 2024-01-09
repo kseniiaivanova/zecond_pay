@@ -10,11 +10,9 @@
 import { Router, Route, Set } from '@redwoodjs/router'
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout'
 
-// @TODO add zco-token to checkout
 const Routes = () => {
   return (
     <Router>
-      <Route path="/checkout" page={CheckoutPage} name="checkout" />
       <Set wrap={DefaultLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/welcome" page={MainPage} name="welcome" />
