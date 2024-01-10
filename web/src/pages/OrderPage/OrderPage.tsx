@@ -3,6 +3,7 @@ import { Link, navigate, routes, useParams } from '@redwoodjs/router'
 import { MetaTags, Head } from '@redwoodjs/web'
 import { useEffect } from 'react'
 import useScript from '../../hooks/useScript'
+import CustomButton from 'src/components/CustomButton/CustomButton'
 
 const OrderPage = () => {
   const [smallScreen] = useMediaQuery('(max-width: 767px)')
@@ -47,9 +48,9 @@ const OrderPage = () => {
           <Text>Order ID: {orderId}</Text>
           <Text>Status: {status}</Text>
           <Text>To pay: {amount} SEK</Text>
-          <button onClick={handleButtonClick}>Pay</button>
+          <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick}></CustomButton>
+          <div id="zco-loader"></div>
         </Stack>
-        <div id="zco-loader"></div>
       </Flex>
     </>
   )
