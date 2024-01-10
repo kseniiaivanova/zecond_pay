@@ -44,8 +44,17 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
           value={inputValue.orderId}
         />
       </FormControl>
-      <Button id="submit-order-id-button" isLoading={loading} isDisabled={disabled} my={5} onClick={handleSave}>
-        <Text>Submit</Text>
+      <Button
+        id="submit-order-id-button"
+        colorScheme="blue"
+        variant="solid"
+        size="md"
+        isLoading={loading}
+        isDisabled={disabled}
+        my={5}
+        onClick={handleSave}
+      >
+        Submit
       </Button>
     </Box>
   )

@@ -10,6 +10,7 @@
       "defaults"
     ]
   },
+  "proxy": "https://api.test.zaver.com",
   "dependencies": {
     "@redwoodjs/forms": "6.5.1",
     "@redwoodjs/router": "6.5.1",
