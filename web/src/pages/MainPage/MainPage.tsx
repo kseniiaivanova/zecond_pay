@@ -7,6 +7,7 @@ import { OrderInputValue } from 'src/types/orderInput'
 import { GET_ORDER } from 'src/apollo/orders'
 import { useQuery } from '@apollo/client'
 import GetOrderForm from 'src/components/GetOrderForm/GetOrderForm'
+import { useToast } from 'src/components/Toaster'
 
 const MainPage = () => {
   //const { setOrderStatus } = useContext(OrderContext)
@@ -63,6 +64,3 @@ const MainPage = () => {
 }
 
 export default MainPage
-function useToast(): { errorToast: any } {
-  throw new Error('Function not implemented.')
-}

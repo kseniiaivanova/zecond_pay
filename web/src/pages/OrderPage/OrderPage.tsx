@@ -5,12 +5,6 @@ import { useEffect } from 'react'
 import useScript from '../../hooks/useScript'
 
 const OrderPage = () => {
-  useScript({
-    src: 'https://iframe-checkout.test.zaver.com/loader/loader-v1.js',
-    id: 'zco-loader',
-    attributes: { 'zco-token': 'emNvdG9rOGRhNTU0ZWMtMmVhMi00MjZmLTg4ZDUtOWUzYzA5NzU3Zjli' },
-  })
-
   const [smallScreen] = useMediaQuery('(max-width: 767px)')
   const { orderId, status, amount } = useParams()
 
@@ -18,15 +12,19 @@ const OrderPage = () => {
 
   const handleButtonClick = async () => {
     try {
-      const response = await fetch('http://localhost:8911/createPayment', {
+      const response = await fetch('/.redwood/functions/createPayment', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       })
 
       if (response.ok) {
         const data = await response.json()
+        const zcoToken = data.token
+        console.log(zcoToken)
+
+        // Set the zco-token attribute for the script
+        const scriptElement = document.getElementById('zco-loader')
+        scriptElement.setAttribute('zco-token', zcoToken)
+
         console.log(data)
       } else {
         console.error('Fetch failed:', response.statusText)
@@ -35,6 +33,12 @@ const OrderPage = () => {
       console.error('An error occurred during fetch:', error)
     }
   }
+
+  useScript({
+    src: 'https://iframe-checkout.test.zaver.com/loader/loader-v1.js',
+    id: 'zco-loader',
+    attributes: { 'zco-token': 'zcoToken' },
+  })
 
   return (
     <>

@@ -16,7 +16,7 @@ const useScript = ({ src, id, attributes }) => {
     return () => {
       document.body.removeChild(script);
     };
-  }, [src, id, attributes]);
+  }, []);
 };
 
 export default useScript;
