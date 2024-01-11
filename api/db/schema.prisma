@@ -25,10 +25,11 @@ model Order {
 }
 
 model Payment {
-  id        String   @id @default(cuid()) @map("_id")
-  orderId   String   @unique
-  updatedAt DateTime @updatedAt @map("updated_at")
-  order     Order?
+  id             String   @id @default(cuid()) @map("_id")
+  orderId        String   @unique
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  order          Order?
+  zaverPaymentId String
 
   @@map("payments")
 }
