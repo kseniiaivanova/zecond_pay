@@ -3,7 +3,7 @@ import { Link, navigate, routes, useParams } from '@redwoodjs/router'
 import useScript from '../../hooks/useScript'
 import CustomButton from 'src/components/CustomButton/CustomButton'
 import { useMutation } from '@apollo/client'
-import { CREATE_PAYMENT } from 'src/apollo/payments'
+import { CREATE_PAYMENT, UPDATE_PAYMENT } from 'src/apollo/payments'
 import { useToast } from 'src/components/Toaster'
 
 const OrderPage = () => {
@@ -11,15 +11,26 @@ const OrderPage = () => {
   const { orderId, status, amount } = useParams()
   const { errorToast } = useToast()
 
-  const [createPayment, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_PAYMENT, {
+  const [createPayment] = useMutation(CREATE_PAYMENT, {
     onError: (error) => {
       console.error('Mutation error:', error)
       errorToast('Something went wrong')
-      //setLoading(false)
     },
 
     onCompleted: (data) => {
       console.log('Mutation completed:', data)
+    },
+  })
+
+  const [updatePayment] = useMutation(UPDATE_PAYMENT, {
+    onError: (error) => {
+      console.error('Mutation error:', error)
+      // Handle error, e.g., display a toast
+    },
+
+    onCompleted: (data) => {
+      console.log('Mutation completed:', data)
+      // Handle successful completion, if needed
     },
   })
 
@@ -32,14 +43,14 @@ const OrderPage = () => {
         },
         body: JSON.stringify({
           title: 'Test request',
-          amount, // Dynamically set the amount
+          amount,
           currency: 'SEK',
           market: 'SE',
           lineItems: [
             {
               name: 'The first test item',
-              totalAmount: amount, // Dynamically set the amount
-              unitPrice: amount, // Dynamically set the amount
+              totalAmount: amount,
+              unitPrice: amount,
               quantity: 1,
               taxRatePercent: 6.0,
             },
@@ -51,6 +62,7 @@ const OrderPage = () => {
         const data = await response.json()
         const zcoToken = data.token
         const zaverPaymentId = data.paymentId
+        const paymentStatus = data.paymentStatus
 
         // Set the zco-token attribute for the script
         const scriptElement = document.getElementById('zco-loader')
@@ -58,11 +70,13 @@ const OrderPage = () => {
 
         console.log(data)
         console.log(data.paymentId)
+        console.log(paymentStatus)
         // Create the payment input object
         const paymentInput = {
           input: {
             orderId: orderId,
             zaverPaymentId: zaverPaymentId,
+            paymentStatus: paymentStatus,
           },
         }
 

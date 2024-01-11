@@ -24,7 +24,7 @@ describe('payments', () => {
 
   scenario('creates a payment', async () => {
     const result = await createPayment({
-      input: { orderId: 'String1778266', updatedAt: '2023-12-27T20:09:42.242Z' },
+      input: { orderId: 'String1778266' }
     })
 
     expect(result.orderId).toEqual('String1778266')

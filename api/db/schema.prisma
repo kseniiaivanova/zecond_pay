@@ -26,10 +26,11 @@ model Order {
 
 model Payment {
   id             String   @id @default(cuid()) @map("_id")
-  orderId        String   @unique
+  orderId        String
   updatedAt      DateTime @updatedAt @map("updated_at")
-  order          Order?
-  zaverPaymentId String
+  paymentStatus  String
+  zaverPaymentId String   @unique
+  Order          Order?
 
   @@map("payments")
 }
