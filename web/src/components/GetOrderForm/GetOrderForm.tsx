@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
 
-import { Box, Button, Flex, FormControl, FormLabel, Hide, Input, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, FormControl, FormLabel, Hide, Input, Text, chakra } from '@chakra-ui/react'
 
 import { OrderInputValue } from 'src/types/orderInput'
 
@@ -32,16 +32,19 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
   const disabled = !inputValue.orderId
 
   return (
-    <Box py={12} h="200px">
-      <Text>Please enter your order ID here:</Text>
-      <FormControl mb={5} isRequired>
+    <Box mt={12} h="240px" backgroundColor="white" borderRadius="md" boxShadow="md" p={6} w="400px">
+      <Text fontSize="xl" mb={4}>
+        <chakra.b>Please enter your order ID here:</chakra.b>
+      </Text>
+      <FormControl isRequired>
         <Input
           id="get-order-input"
-          maxW="480px"
           name="orderId"
           onChange={handleInputChange}
-          placeholder="order id"
+          placeholder="Order ID"
           value={inputValue.orderId}
+          borderColor="blue.300"
+          focusBorderColor="blue.500"
         />
       </FormControl>
       <Button
@@ -52,6 +55,11 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
         isLoading={loading}
         isDisabled={disabled}
         my={5}
+        w="100%"
+        alignSelf="center"
+        textTransform="uppercase"
+        fontWeight="bold"
+        letterSpacing="widest"
         onClick={handleSave}
       >
         Submit

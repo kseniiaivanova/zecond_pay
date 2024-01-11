@@ -55,9 +55,13 @@ const MainPage = () => {
   return (
     <>
       <MetaTags title="Main" description="Main page" />
-      <Flex w="100%">
+      <Flex
+        direction="column"
+        align="center" // Center content horizontally
+        minH="100vh" // Set minimum height to cover the entire viewport
+      >
         {loading && <Spinner />}
-        <GetOrderForm loading={loading} onSave={onSave} savedValue={value}></GetOrderForm>
+        <GetOrderForm loading={loading} onSave={onSave} savedValue={value} />
       </Flex>
     </>
   )
