@@ -17,8 +17,21 @@ export const CREATE_PAYMENT = gql`
       orderId
       updatedAt
       zaverPaymentId
+      paymentStatus
 
 
+    }
+  }
+`;
+
+export const UPDATE_PAYMENT = gql`
+  mutation UpdatePayment($id: String!, $input: UpdatePaymentInput!) {
+    updatePayment(id: $id, input: $input) {
+      id
+      orderId
+      updatedAt
+      zaverPaymentId
+      paymentStatus
     }
   }
 `;

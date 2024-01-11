@@ -12,4 +12,6 @@ export const PAYMENT = `
 id
 orderId
 updatedAt
+zaverPaymentId
+paymentStatus
 `

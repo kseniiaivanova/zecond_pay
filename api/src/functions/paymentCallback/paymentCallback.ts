@@ -1,5 +1,7 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda';
+import { db } from 'src/lib/db';
 import { logger } from 'src/lib/logger';
+import { payment } from 'src/services/payments/payments';
 
 /**
  * The handler function is your code that processes http request events.
@@ -13,7 +15,7 @@ import { logger } from 'src/lib/logger';
  *
  * @typedef { import('aws-lambda').APIGatewayEvent } APIGatewayEvent
  * @typedef { import('aws-lambda').Context } Context
- * @param { APIGatewayEvent } event - an object which contains information from the invoker.
+ * @param { APIGatewayEvent } event - an object that contains information from the invoker.
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
@@ -21,10 +23,32 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
   logger.info(`${event.httpMethod} ${event.path}: paymentCallback function`);
 
   try {
-    // Parse the incoming data from the payment system
     const paymentData = JSON.parse(event.body);
+    console.log(paymentData);
 
-    // Process the payment data (implement your logic here)
+    // Extract relevant information from paymentData
+    const zaverPaymentId = paymentData.paymentId;
+    const paymentStatus = paymentData.paymentStatus;
+
+
+    // Update payment status
+    if (paymentStatus === 'SETTLED') {
+      await db.payment.update({
+        where: { zaverPaymentId: zaverPaymentId },
+        data: { paymentStatus: paymentStatus },
+      });
+
+      const foundPayment = await db.payment.findUnique({
+        where: { zaverPaymentId },
+      });
+
+        await db.order.update({
+        where: { paymentId:foundPayment.id },
+        data: {status: 'PAID'}
+      })
+
+      console.log('Payment status updated');
+    }
 
     // Respond with a success status
     return {
