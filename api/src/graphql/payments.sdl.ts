@@ -4,6 +4,7 @@ export const schema = gql`
     orderId: String!
     updatedAt: DateTime!
     order: Order
+    zaverPaymentId: String
   }
 
   type Query {
@@ -13,6 +14,8 @@ export const schema = gql`
 
   input CreatePaymentInput {
     orderId: String!
+    zaverPaymentId: String
+
   }
 
   input UpdatePaymentInput {

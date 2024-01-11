@@ -15,28 +15,41 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
   }
 
   try {
+    const requestBody = JSON.parse(event.body || '{}');
+    const { amount } = requestBody;
+
+    if (amount === undefined) {
+      // If amount is not provided, return a bad request response
+      return { statusCode: 400, body: JSON.stringify({ error: 'Amount is required' }) };
+    }
+
     const createPayment = await axios.post(
       CHECKOUT_URL,
       {
         title: 'Test request',
-        amount: 5.0,
+        amount: amount,
         currency: 'SEK',
         market: 'SE',
         lineItems: [
           {
             name: 'The first test item',
-            totalAmount: 5.0,
-            unitPrice: 5,
+            totalAmount: amount,
+            unitPrice: amount,
             quantity: 1,
             taxRatePercent: 6.0,
           },
         ],
+        merchantUrls: {
+          callbackUrl: "https://708f-81-170-201-250.ngrok-free.app/.redwood/functions/paymentCallback"
+
+        }
+
       },
       {
         headers: { Authorization: `Bearer ${ZAVER_API_KEY}` },
       }
     )
-
+    console.log('Response from createPayment:', createPayment.data);
     return {
       statusCode: 200,
       body: JSON.stringify(createPayment.data),

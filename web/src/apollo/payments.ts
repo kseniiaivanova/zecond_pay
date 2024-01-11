@@ -9,3 +9,16 @@ export const GET_PAYMENT= gql`
   }
 }
 `
+
+export const CREATE_PAYMENT = gql`
+  mutation CreatePayment($input: CreatePaymentInput!) {
+    createPayment(input: $input) {
+      id
+      orderId
+      updatedAt
+      zaverPaymentId
+
+
+    }
+  }
+`;
