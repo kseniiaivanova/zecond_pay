@@ -40,7 +40,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
           },
         ],
         merchantUrls: {
-          callbackUrl: "https://7106-81-170-201-250.ngrok-free.app/.redwood/functions/paymentCallback"
+          callbackUrl: "https://07d7-2-70-1-157.ngrok-free.app/.redwood/functions/paymentCallback"
 
         }
 

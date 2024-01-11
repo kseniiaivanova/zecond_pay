@@ -1,10 +1,13 @@
-import { Flex, Text, Stack, Button, useMediaQuery, Box } from '@chakra-ui/react'
-import { Link, navigate, routes, useParams } from '@redwoodjs/router'
+import { Flex, Text, Stack, Heading, useMediaQuery, Box, VStack, chakra } from '@chakra-ui/react'
+import { navigate, routes, useParams } from '@redwoodjs/router'
 import useScript from '../../hooks/useScript'
 import CustomButton from 'src/components/CustomButton/CustomButton'
 import { useMutation } from '@apollo/client'
 import { CREATE_PAYMENT, UPDATE_PAYMENT } from 'src/apollo/payments'
 import { useToast } from 'src/components/Toaster'
+
+import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ChakraLink, LinkProps } from '@chakra-ui/react'
 
 const OrderPage = () => {
   const [smallScreen] = useMediaQuery('(max-width: 767px)')
@@ -96,18 +99,40 @@ const OrderPage = () => {
     attributes: { 'zco-token': 'zcoToken' },
   })
 
+  const handleGoBack = () => {
+    navigate(routes.welcome())
+  }
+
   return (
-    <>
-      <Flex justifyContent={'center'}>
-        <Stack>
-          <Text>Order ID: {orderId}</Text>
-          <Text>Status: {status}</Text>
-          <Text>To pay: {amount} SEK</Text>
-          <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick}></CustomButton>
-          <div id="zco-loader"></div>
-        </Stack>
-      </Flex>
-    </>
+    <Flex direction="column" align="center" justify="flex-start" pt={8}>
+      <Heading as="h1" size="xl" noOfLines={1} mb={8}>
+        Your order details:
+      </Heading>
+      <Stack
+        spacing={2}
+        align="center"
+        backgroundColor="white"
+        p={6}
+        mb={6}
+        w="350px"
+        borderWidth="1px"
+        borderRadius="lg"
+      >
+        <Text>
+          <chakra.b fontSize="xl">Order ID:</chakra.b> {orderId}
+        </Text>
+        <Text fontSize="lg">
+          <chakra.b fontSize="xl">Status: </chakra.b>
+          {status}
+        </Text>
+        {status === 'created' && <Text>To pay: {amount} SEK</Text>}
+        <div id="zco-loader"></div>
+      </Stack>
+      {status === 'created' && (
+        <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick}></CustomButton>
+      )}
+      <CustomButton id="navigation-button" buttonText="Go back" onClick={handleGoBack}></CustomButton>
+    </Flex>
   )
 }
 
