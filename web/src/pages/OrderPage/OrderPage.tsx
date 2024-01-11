@@ -116,7 +116,8 @@ const OrderPage = () => {
         mb={6}
         w="350px"
         borderWidth="1px"
-        borderRadius="lg"
+        borderRadius="md"
+        boxShadow="md"
       >
         <Text>
           <chakra.b fontSize="xl">Order ID:</chakra.b> {orderId}
@@ -125,7 +126,12 @@ const OrderPage = () => {
           <chakra.b fontSize="xl">Status: </chakra.b>
           {status}
         </Text>
-        {status === 'created' && <Text>To pay: {amount} SEK</Text>}
+        {status === 'created' && (
+          <Text fontSize="lg">
+            <chakra.b fontSize="xl">To pay: </chakra.b>
+            {amount} SEK
+          </Text>
+        )}
         <div id="zco-loader"></div>
       </Stack>
       {status === 'created' && (
