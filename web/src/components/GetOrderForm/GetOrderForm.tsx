@@ -32,9 +32,17 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
   const disabled = !inputValue.orderId
 
   return (
-    <Box mt={12} h="240px" backgroundColor="white" borderRadius="md" boxShadow="md" p={6} w="400px">
+    <Box
+      mt={12}
+      h="240px"
+      backgroundColor="white"
+      borderRadius="md"
+      boxShadow="md"
+      p={6}
+      w={['300px', '400px', '600px']}
+    >
       <Text fontSize="xl" mb={4}>
-        <chakra.b>Please enter your order ID here:</chakra.b>
+        <chakra.b>Please enter your order ID:</chakra.b>
       </Text>
       <FormControl isRequired>
         <Input

@@ -1,10 +1,12 @@
 import React from 'react'
 
-import { Box, Flex, Link, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, chakra } from '@chakra-ui/react'
 
 import { TopBarTypes } from 'src/types/layout'
 
 import Logo from 'src/components/Logo/Logo'
+
+import { routes } from '@redwoodjs/router'
 
 const dropShadow = {
   backgroundColor: '#ffffff',
@@ -29,13 +31,15 @@ const TopBar = ({ showDropShadow = true, useBlurEffect = true }: TopBarTypes) =>
       zIndex: 999,
     }}
   >
-    <Flex align="start" alignItems="center" height={['80px', '110px']} justify={['space-between']} px="5%" width="100%">
-      <Box>
-        <Link href="https://drem.se/">
-          <Logo />
-        </Link>
+    <Flex align="start" alignItems="center" height={['110px', '110px']} justify={['flex-start']} px="5%" width="100%">
+      <Box p={2}>
+        <Logo size={['40px', '60px', '80px']} />
       </Box>
-      <Text>I am the header</Text>
+      <Box px={2} ml={[6, 8, 8]}>
+        <Text>
+          <chakra.b fontSize="4xl">ZecondPay</chakra.b>
+        </Text>
+      </Box>
     </Flex>
   </Flex>
 )
