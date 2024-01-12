@@ -5,14 +5,13 @@ import CustomButton from 'src/components/CustomButton/CustomButton'
 import { useMutation } from '@apollo/client'
 import { CREATE_PAYMENT, UPDATE_PAYMENT } from 'src/apollo/payments'
 import { useToast } from 'src/components/Toaster'
-
-import { Link as ReactRouterLink } from 'react-router-dom'
-import { Link as ChakraLink, LinkProps } from '@chakra-ui/react'
+import { useState } from 'react'
 
 const OrderPage = () => {
   const [smallScreen] = useMediaQuery('(max-width: 767px)')
   const { orderId, status, amount } = useParams()
   const { errorToast } = useToast()
+  const [isPaymentCreated, setIsPaymentCreated] = useState(false)
 
   const [createPayment] = useMutation(CREATE_PAYMENT, {
     onError: (error) => {
@@ -22,6 +21,7 @@ const OrderPage = () => {
 
     onCompleted: (data) => {
       console.log('Mutation completed:', data)
+      setIsPaymentCreated(true)
     },
   })
 
@@ -104,7 +104,7 @@ const OrderPage = () => {
   }
 
   return (
-    <Flex direction="column" align="center" justify="flex-start" pt={8}>
+    <Flex direction="column" minH="1000px" align="center" justify="flex-start" p={8}>
       <Heading as="h1" size="xl" noOfLines={1} mb={8}>
         Your order details:
       </Heading>
@@ -122,11 +122,13 @@ const OrderPage = () => {
         <Text>
           <chakra.b fontSize="xl">Order ID:</chakra.b> {orderId}
         </Text>
-        <Text fontSize="lg">
-          <chakra.b fontSize="xl">Status: </chakra.b>
-          {status}
-        </Text>
-        {status === 'created' && (
+        {!isPaymentCreated && (
+          <Text fontSize="lg">
+            <chakra.b fontSize="xl">Status: </chakra.b>
+            {status}
+          </Text>
+        )}
+        {status === 'created' && !isPaymentCreated && (
           <Text fontSize="lg">
             <chakra.b fontSize="xl">To pay: </chakra.b>
             {amount} SEK
@@ -134,7 +136,7 @@ const OrderPage = () => {
         )}
         <div id="zco-loader"></div>
       </Stack>
-      {status === 'created' && (
+      {status === 'created' && !isPaymentCreated && (
         <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick}></CustomButton>
       )}
       <CustomButton id="navigation-button" buttonText="Go back" onClick={handleGoBack}></CustomButton>
