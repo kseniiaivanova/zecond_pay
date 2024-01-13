@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
 
-import { Box, Button, Flex, FormControl, FormLabel, Hide, Input, Text, chakra } from '@chakra-ui/react'
+import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Text, chakra } from '@chakra-ui/react'
 
 import { OrderInputValue } from 'src/types/orderInput'
 
