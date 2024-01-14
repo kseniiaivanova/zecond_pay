@@ -39,23 +39,6 @@ yarn redwood dev
 Your browser should automatically open to [http://localhost:8910](http://localhost:8910) where you'll see the welcome page.
 
 
-
-## Try it
-
-To try the application, use one of the test IDs provided here and paste them on Welcome page, then click Submit button:
-
-3c2e9a1d8f7b6a0c5e9d2f1a
-
-
-f0e7b9a2c3d8f5a1e9d2b6f1
-
-
-9c2e4a1d8f7b6a0c5e9d2f1a
-
-When Zaver's checkout UI renders, proceed with payment. Payment is sumulated and no money is charged though you will get SMS confirmation if entering your phone number. After successful payment, click Go back button. Enter the same id once again to check order status, it will be "PAID".
-
-
-
 ## Quick Links
 
 - [Zaver's homepage](https://zaver.com)
