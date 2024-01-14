@@ -1,7 +1,7 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda';
 import { db } from 'src/lib/db';
 import { logger } from 'src/lib/logger';
-import { payment } from 'src/services/payments/payments';
+
 
 /**
  * The handler function is your code that processes http request events.
