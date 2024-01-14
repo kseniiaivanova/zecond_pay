@@ -1,4 +1,4 @@
-import { Flex, Text, Stack, Heading, useMediaQuery, Box, VStack, chakra } from '@chakra-ui/react'
+import { Flex, Text, Stack, Heading, useMediaQuery, chakra } from '@chakra-ui/react'
 import { navigate, routes, useParams } from '@redwoodjs/router'
 import useScript from '../../hooks/useScript'
 import CustomButton from 'src/components/CustomButton/CustomButton'
@@ -8,7 +8,6 @@ import { useToast } from 'src/components/Toaster'
 import { useState } from 'react'
 
 const OrderPage = () => {
-  const [smallScreen] = useMediaQuery('(max-width: 767px)')
   const { orderId, status, amount } = useParams()
   const { errorToast } = useToast()
   const [isPaymentCreated, setIsPaymentCreated] = useState(false)

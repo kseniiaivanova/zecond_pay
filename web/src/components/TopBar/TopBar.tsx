@@ -6,8 +6,6 @@ import { TopBarTypes } from 'src/types/layout'
 
 import Logo from 'src/components/Logo/Logo'
 
-import { routes } from '@redwoodjs/router'
-
 const dropShadow = {
   backgroundColor: '#ffffff',
   boxShadow: '0px 1px 2px 0px rgba(0, 0, 0, 0.25)',
