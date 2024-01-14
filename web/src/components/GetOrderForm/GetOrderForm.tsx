@@ -3,6 +3,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { Box, Button, Flex, FormControl, FormErrorMessage, Input, Text, chakra } from '@chakra-ui/react'
 
 import { OrderInputValue } from 'src/types/orderInput'
+import { useToast } from 'src/components/Toaster'
 
 const INITIAL_VALUE: OrderInputValue = {
   orderId: '',
@@ -16,18 +17,32 @@ type Props = {
 
 const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
   const [inputValue, setInputValue] = useState<OrderInputValue>(INITIAL_VALUE)
+  const { errorToast } = useToast()
   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    const trimmedValue = target.value.trimStart()
+    const trimmedValue = target.value.trim()
     setInputValue((prevState) => ({ ...prevState, [target.name]: trimmedValue }))
   }
 
   const handleSave = () => {
-    onSave({
-      ...inputValue,
-      orderId: inputValue.orderId,
-    })
+    const idPattern = /^[0-9a-f]{24}$/
 
-    setInputValue((prevState) => ({ ...prevState, orderId: '' }))
+    // Function to validate the ID
+    function validateId(id) {
+      return idPattern.test(id)
+    }
+
+    if (validateId(inputValue.orderId)) {
+      console.log('yes')
+
+      onSave({
+        ...inputValue,
+        orderId: inputValue.orderId,
+      })
+
+      setInputValue((prevState) => ({ ...prevState, orderId: '' }))
+    } else {
+      errorToast('ID not valid!')
+    }
   }
   const disabled = !inputValue.orderId
 

@@ -2,12 +2,19 @@ import type { QueryResolvers, MutationResolvers, OrderRelationResolvers } from '
 
 import { db } from 'src/lib/db'
 import { RedwoodGraphQLError } from '@redwoodjs/graphql-server'
+import { validate } from '@redwoodjs/api'
 
 export const listOrders: QueryResolvers['listOrders'] = () => {
   return db.order.findMany()
 }
 
 export const getOrder: QueryResolvers['getOrder'] = async ({ id }) => {
+  validate(id, 'Order ID', {
+    format: {
+      pattern: /^[0-9a-f]{24}$/,
+      message: 'Invalid Order ID. Please provide a valid ID.',
+    }
+  });
   const order = await db.order.findUnique({
     where: { id },
   })
