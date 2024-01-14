@@ -38,7 +38,7 @@ const OrderPage = () => {
 
   const handleButtonClick = async () => {
     try {
-      const response = await fetch('/.redwood/functions/createPayment', {
+      const response = await fetch('/.netlify/functions/createPayment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
