@@ -40,7 +40,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
           },
         ],
         merchantUrls: {
-          callbackUrl: "https://zecond.vercel.app/.redwood/functions/paymentCallback"
+          callbackUrl: "https://zaverpay.netlify.app/.api/paymentCallback"
 
         }
 

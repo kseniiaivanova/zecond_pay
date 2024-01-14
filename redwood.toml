@@ -9,7 +9,7 @@
   title = "Zecond pay"
   port = 8910
   host = '0.0.0.0'
-  apiUrl = "/api"
+  apiUrl = "/.netlify/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
   includeEnvironmentVariables = [ "ZAVER_API_KEY", "CHECKOUT_URL" ]
 [api]
   port = 8911
