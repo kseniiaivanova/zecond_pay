@@ -40,7 +40,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
           },
         ],
         merchantUrls: {
-          callbackUrl: "https://zaverpay.netlify.app/.netlify/functions/paymentCallback" //added url
+          callbackUrl: "https://zaverpay.netlify.app/.netlify/functions/paymentCallback"
 
         }
 

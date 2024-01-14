@@ -83,7 +83,7 @@ const OrderPage = () => {
         }
 
         // Call the GraphQL mutation with the payment input
-        // createPayment({ variables: paymentInput })
+        createPayment({ variables: paymentInput })
       } else {
         console.error('Fetch failed:', response.statusText)
       }
