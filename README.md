@@ -43,4 +43,5 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 
 - [Zaver's homepage](https://zaver.com)
 - [RedwoodJS](https://redwoodjs.com)
+- [ZecondPay](https://zaverpay.netlify.app/welcome)
 
