@@ -100,13 +100,13 @@ const OrderPage = () => {
 
   return (
     <Flex direction="column" minH="1000px" align="center" justify="flex-start" p={8}>
-      <Heading as="h1" size="xl" noOfLines={1} mb={8}>
+      <Heading as="h1" size="lg" noOfLines={1} mb={8}>
         Your order details:
       </Heading>
       <Stack
         spacing={2}
         align="center"
-        backgroundColor="white"
+        backgroundColor="grey.25"
         p={6}
         mb={6}
         w="350px"

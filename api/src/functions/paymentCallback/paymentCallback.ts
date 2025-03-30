@@ -43,11 +43,11 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       });
 
         await db.order.update({
-        where: { paymentId:foundPayment.id },
+        where: { paymentId: foundPayment.id },
         data: {status: 'PAID', paidAt: new Date()}
       })
-
       console.log('Payment status updated');
+
     }
 
     // Respond with a success status

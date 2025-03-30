@@ -48,14 +48,14 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
     <Box
       mt={12}
       h="240px"
-      backgroundColor="white"
+      backgroundColor="grey.25"
       borderRadius="md"
       boxShadow="md"
       p={6}
       w={['300px', '400px', '600px']}
     >
       <Text fontSize="xl" mb={4}>
-        <chakra.b>Please enter your order ID:</chakra.b>
+        Please enter your order ID:
       </Text>
       <FormControl isRequired>
         <Input
