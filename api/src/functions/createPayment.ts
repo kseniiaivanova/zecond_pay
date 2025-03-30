@@ -49,7 +49,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
         headers: { Authorization: `Bearer ${ZAVER_API_KEY}` },
       }
     )
-    console.log('Response from createPayment:', createPayment.data);
+
     return {
       statusCode: 200,
       body: JSON.stringify(createPayment.data),

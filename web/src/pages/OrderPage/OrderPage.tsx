@@ -19,7 +19,6 @@ const OrderPage = () => {
     },
 
     onCompleted: (data) => {
-      console.log('Mutation completed:', data)
       setIsPaymentCreated(true)
     },
   })
@@ -70,9 +69,6 @@ const OrderPage = () => {
         const scriptElement = document.getElementById('zco-loader')
         scriptElement.setAttribute('zco-token', zcoToken)
 
-        console.log(data)
-        console.log(data.paymentId)
-        console.log(paymentStatus)
         // Create the payment input object
         const paymentInput = {
           input: {

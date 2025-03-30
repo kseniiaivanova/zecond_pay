@@ -32,8 +32,6 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
     }
 
     if (validateId(inputValue.orderId)) {
-      console.log('yes')
-
       onSave({
         ...inputValue,
         orderId: inputValue.orderId,
