@@ -13,7 +13,7 @@ const dropShadow = {
 
 const blurEffect = {
   backdropFilter: 'saturate(180%) blur(5px)',
-  backgroundColor: 'rgba(255, 255, 255, 0.68)',
+  backgroundColor: 'rgba(245, 245, 247, 0.68)',
 }
 
 const TopBar = ({ showDropShadow = true, useBlurEffect = true }: TopBarTypes) => (

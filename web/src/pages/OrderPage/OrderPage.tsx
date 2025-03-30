@@ -1,16 +1,17 @@
-import { Flex, Text, Stack, Heading, useMediaQuery, chakra } from '@chakra-ui/react'
+import { Flex, Text, Stack, Heading, chakra } from '@chakra-ui/react'
 import { navigate, routes, useParams } from '@redwoodjs/router'
 import useScript from '../../hooks/useScript'
 import CustomButton from 'src/components/CustomButton/CustomButton'
 import { useMutation } from '@apollo/client'
 import { CREATE_PAYMENT, UPDATE_PAYMENT } from 'src/apollo/payments'
 import { useToast } from 'src/components/Toaster'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const OrderPage = () => {
   const { orderId, status, amount } = useParams()
   const { errorToast } = useToast()
   const [isPaymentCreated, setIsPaymentCreated] = useState(false)
+  const [zaverPaymentId, setZaverPaymentId] = useState(null)
 
   const [createPayment] = useMutation(CREATE_PAYMENT, {
     onError: (error) => {
@@ -34,6 +35,28 @@ const OrderPage = () => {
       // Handle successful completion, if needed
     },
   })
+
+  useEffect(() => {
+    if (!zaverPaymentId) return
+
+    const interval = setInterval(async () => {
+      const response = await fetch('/.netlify/functions/checkPaymentStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ paymentId: zaverPaymentId }),
+      })
+
+      const result = await response.json()
+      if (result.status === 'SETTLED') {
+        clearInterval(interval)
+        navigate('/thank-you')
+      }
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [zaverPaymentId])
 
   const handleButtonClick = async () => {
     try {
@@ -63,6 +86,7 @@ const OrderPage = () => {
         const data = await response.json()
         const zcoToken = data.token
         const zaverPaymentId = data.paymentId
+        setZaverPaymentId(zaverPaymentId)
         const paymentStatus = data.paymentStatus
 
         // Set the zco-token attribute for the script
@@ -99,7 +123,7 @@ const OrderPage = () => {
   }
 
   return (
-    <Flex direction="column" minH="1000px" align="center" justify="flex-start" p={8}>
+    <Flex direction="column" minH="100vh" align="center" justify="flex-start" p={8}>
       <Heading as="h1" size="lg" noOfLines={1} mb={8}>
         Your order details:
       </Heading>
