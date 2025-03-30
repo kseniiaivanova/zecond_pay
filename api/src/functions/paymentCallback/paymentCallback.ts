@@ -24,7 +24,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
 
   try {
     const paymentData = JSON.parse(event.body);
-    console.log(paymentData);
+
 
     // Extract relevant information from paymentData
     const zaverPaymentId = paymentData.paymentId;
@@ -43,11 +43,11 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       });
 
         await db.order.update({
-        where: { paymentId:foundPayment.id },
-        data: {status: 'PAID'}
+        where: { paymentId: foundPayment.id },
+        data: {status: 'PAID', paidAt: new Date()}
       })
-
       console.log('Payment status updated');
+
     }
 
     // Respond with a success status

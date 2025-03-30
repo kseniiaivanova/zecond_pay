@@ -8,7 +8,7 @@ const ZAVER_API_KEY = process.env.ZAVER_API_KEY
 const CHECKOUT_URL = process.env.CHECKOUT_URL
 
 export const handler = async (event: APIGatewayEvent, _context: Context) => {
-  logger.info(`${event.httpMethod} ${event.path}: createOffer function`)
+  logger.info(`${event.httpMethod} ${event.path}: createPayment function`)
 
   if (event.httpMethod !== 'POST') {
     return { statusCode: 404 }
@@ -49,7 +49,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
         headers: { Authorization: `Bearer ${ZAVER_API_KEY}` },
       }
     )
-    console.log('Response from createPayment:', createPayment.data);
+
     return {
       statusCode: 200,
       body: JSON.stringify(createPayment.data),
