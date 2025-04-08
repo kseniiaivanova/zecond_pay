@@ -8,6 +8,7 @@ import { GET_ORDER } from 'src/apollo/orders'
 import { useQuery } from '@apollo/client'
 import GetOrderForm from 'src/components/GetOrderForm/GetOrderForm'
 import { useToast } from 'src/components/Toaster'
+import EventCard from 'src/components/EventCard/EventCard'
 
 const MainPage = () => {
   //const { setOrderStatus } = useContext(OrderContext)
@@ -54,8 +55,9 @@ const MainPage = () => {
 
   return (
     <>
-      <MetaTags title="Main" description="Main page" />
-      <Flex direction="column" align="center" minH="100vh">
+      <MetaTags title="Eventura | Home" description="Your event ticket checkout" />
+      <Flex direction="column" alignItems="center" minH="100vh">
+        <EventCard />
         {loading && <Spinner />}
         <GetOrderForm loading={loading} onSave={onSave} savedValue={value} />
       </Flex>

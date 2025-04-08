@@ -6,7 +6,7 @@
 # https://redwoodjs.com/docs/app-configuration-redwood-toml
 
 [web]
-  title = "Zecond pay"
+  title = "Eventura"
   port = 8910
   host = '0.0.0.0'
   apiUrl = "/.netlify/functions" # You can customize graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
