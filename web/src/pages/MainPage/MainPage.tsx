@@ -17,7 +17,6 @@ const MainPage = () => {
       errorToast('Something went wrong')
     },
     onCompleted: (data) => {
-      console.log('Order created:', data)
       navigate(
         routes.order({
           orderId: data.createOrder.id,
