@@ -1,6 +1,6 @@
 # README
 
-Welcome to ZecondPay! This is an example of a RedwoodJS-Zaver integration made as a degree project. Integration allows startups using [RedwoodJS](https://redwoodjs.com) and selling durable goods accept online payments.
+Welcome to Eventura! This is an example of a RedwoodJS-Zaver integration made as an event booking simulation. Integration allows companies using [RedwoodJS](https://redwoodjs.com) accept online payments. No real payments are made with this app so you can test the payment flow. 
 
 > **Prerequisites**
 >
