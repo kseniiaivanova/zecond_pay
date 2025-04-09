@@ -5,6 +5,8 @@ amount
 paymentId
 orderedAt
 paidAt
+eventId
+eventName
 `
 
 
