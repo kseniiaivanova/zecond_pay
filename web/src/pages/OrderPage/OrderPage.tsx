@@ -127,30 +127,41 @@ const OrderPage = () => {
     <>
       <MetaTags title="Order" description="Order summary" />
       <Flex direction="column" minH="100vh" align="center" justify="flex-start" px={4} py={10}>
-        <Heading as="h1" size="lg" mb={6} textAlign="center">
+        <Heading as="h1" size="lg" mb={6} textAlign="center" color="gray.800">
           Order Summary
         </Heading>
 
-        <Flex bg="gray.50" p={8} borderRadius="2xl" boxShadow="md" w="full" maxW="lg" align="center">
-          <VStack spacing={4} align="stretch" mt={4}>
-            <Text fontSize="md">
+        <Flex
+          bg="white"
+          direction="column"
+          p={8}
+          borderRadius="lg"
+          boxShadow="xl"
+          w="full"
+          maxW="lg"
+          align="center"
+          justify="center"
+        >
+          <VStack spacing={6} align="stretch" mt={4}>
+            <Text fontSize="md" color="gray.600">
               <chakra.b>Order ID:</chakra.b> {orderId}
             </Text>
-            <Text fontSize="md">
+            <Text fontSize="md" color="gray.600">
               <chakra.b>Event:</chakra.b> {eventName}
             </Text>
-            <Text fontSize="md">
+            <Text fontSize="md" color="gray.600">
               <chakra.b>Status:</chakra.b> {status}
             </Text>
             {status === 'CREATED' && !isPaymentCreated && (
-              <Text fontSize="md">
+              <Text fontSize="md" color="gray.600">
                 <chakra.b>Amount to Pay:</chakra.b> {amount} SEK
               </Text>
             )}
-            <Box id="zco-loader" mt={4}></Box>
           </VStack>
+          <Box id="zco-loader" mt={6}></Box>
         </Flex>
-        <VStack spacing={4} mt={10}>
+
+        <VStack spacing={6} mt={10} align="center">
           {status === 'CREATED' && !isPaymentCreated && (
             <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick} />
           )}
@@ -160,5 +171,4 @@ const OrderPage = () => {
     </>
   )
 }
-
 export default OrderPage
