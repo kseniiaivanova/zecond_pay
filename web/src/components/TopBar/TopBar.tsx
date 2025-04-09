@@ -13,7 +13,7 @@ const dropShadow = {
 
 const blurEffect = {
   backdropFilter: 'saturate(180%) blur(5px)',
-  backgroundColor: 'rgba(245, 245, 247, 0.68)',
+  backgroundColor: 'rgba(231, 231, 235, 0.68)',
 }
 
 const TopBar = ({ showDropShadow = true, useBlurEffect = true }: TopBarTypes) => (
@@ -23,19 +23,18 @@ const TopBar = ({ showDropShadow = true, useBlurEffect = true }: TopBarTypes) =>
     position="fixed"
     style={{
       ...(showDropShadow && dropShadow),
-      ...(useBlurEffect && blurEffect),
 
       justifyContent: 'center',
       zIndex: 999,
     }}
   >
     <Flex align="start" alignItems="center" height={['110px', '110px']} justify={['flex-start']} px="5%" width="100%">
-      <Box p={2}>
-        <Logo size={['40px', '60px', '80px']} />
+      <Box>
+        <Logo />
       </Box>
-      <Box px={2} ml={[6, 8, 8]}>
-        <Text>
-          <chakra.b fontSize="4xl">ZecondPay</chakra.b>
+      <Box ml={[6, 4, 4]}>
+        <Text fontSize="5xl" fontWeight="700">
+          Eventura
         </Text>
       </Box>
     </Flex>

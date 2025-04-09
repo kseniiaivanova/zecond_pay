@@ -22,20 +22,15 @@ describe('orders', () => {
     expect(result).toEqual(scenario.order.one)
   })
 
-  scenario('creates a order', async (scenario: StandardScenario) => {
+  scenario('creates a order', async () => {
     const result = await createOrder({
-      input: {
-        status: 'String',
-        amount: 5708893.724649524,
-        paymentId: scenario.order.two.paymentId,
-        orderedAt: '2023-12-27T20:08:54.617Z',
-      },
+      input: { status: 'String', amount: 4794615.021464199, eventId: 'String', eventName: 'String' },
     })
 
     expect(result.status).toEqual('String')
-    expect(result.amount).toEqual(5708893.724649524)
-    expect(result.paymentId).toEqual(scenario.order.two.paymentId)
-    expect(result.orderedAt).toEqual(new Date('2023-12-27T20:08:54.617Z'))
+    expect(result.amount).toEqual(4794615.021464199)
+    expect(result.eventId).toEqual('String')
+    expect(result.eventName).toEqual('String')
   })
 
   scenario('updates a order', async (scenario: StandardScenario) => {

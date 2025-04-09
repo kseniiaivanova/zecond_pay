@@ -3,22 +3,8 @@ import type { ScenarioData } from '@redwoodjs/testing/api'
 
 export const standard = defineScenario<Prisma.OrderCreateArgs>({
   order: {
-    one: {
-      data: {
-        status: 'String',
-        amount: 89640.08092317899,
-        orderedAt: '2023-12-27T20:08:54.657Z',
-        payment: { create: { orderId: 'String6332504', updatedAt: '2023-12-27T20:08:54.657Z' } },
-      },
-    },
-    two: {
-      data: {
-        status: 'String',
-        amount: 4227790.582863109,
-        orderedAt: '2023-12-27T20:08:54.657Z',
-        payment: { create: { orderId: 'String7546159', updatedAt: '2023-12-27T20:08:54.657Z' } },
-      },
-    },
+    one: { data: { status: 'String', amount: 1068471.7903559736, eventId: 'String', eventName: 'String' } },
+    two: { data: { status: 'String', amount: 9383774.883421443, eventId: 'String', eventName: 'String' } },
   },
 })
 

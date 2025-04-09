@@ -20,6 +20,8 @@ model Order {
   payment   Payment?  @relation(fields: [paymentId], references: [id])
   orderedAt DateTime  @default(now()) @map("ordered_at")
   paidAt    DateTime? @map("paid_at")
+  eventId   String
+  eventName String
 
   @@map("orders")
 }

@@ -1,4 +1,4 @@
-import { Flex, Text, Stack, Heading, chakra } from '@chakra-ui/react'
+import { Flex, Text, Stack, Heading, chakra, HStack, VStack, Box } from '@chakra-ui/react'
 import { navigate, routes, useParams } from '@redwoodjs/router'
 import useScript from '../../hooks/useScript'
 import CustomButton from 'src/components/CustomButton/CustomButton'
@@ -6,9 +6,10 @@ import { useMutation } from '@apollo/client'
 import { CREATE_PAYMENT, UPDATE_PAYMENT } from 'src/apollo/payments'
 import { useToast } from 'src/components/Toaster'
 import { useEffect, useState } from 'react'
+import { MetaTags } from '@redwoodjs/web'
 
 const OrderPage = () => {
-  const { orderId, status, amount } = useParams()
+  const { orderId, status, amount, eventName } = useParams()
   const { errorToast } = useToast()
   const [isPaymentCreated, setIsPaymentCreated] = useState(false)
   const [zaverPaymentId, setZaverPaymentId] = useState(null)
@@ -123,43 +124,40 @@ const OrderPage = () => {
   }
 
   return (
-    <Flex direction="column" minH="100vh" align="center" justify="flex-start" p={8}>
-      <Heading as="h1" size="lg" noOfLines={1} mb={8}>
-        Your order details:
-      </Heading>
-      <Stack
-        spacing={2}
-        align="center"
-        backgroundColor="grey.25"
-        p={6}
-        mb={6}
-        w="350px"
-        borderWidth="1px"
-        borderRadius="md"
-        boxShadow="md"
-      >
-        <Text>
-          <chakra.b fontSize="xl">Order ID:</chakra.b> {orderId}
-        </Text>
-        {!isPaymentCreated && (
-          <Text fontSize="lg">
-            <chakra.b fontSize="xl">Status: </chakra.b>
-            {status}
-          </Text>
-        )}
-        {status === 'created' && !isPaymentCreated && (
-          <Text fontSize="lg">
-            <chakra.b fontSize="xl">To pay: </chakra.b>
-            {amount} SEK
-          </Text>
-        )}
-        <div id="zco-loader"></div>
-      </Stack>
-      {status === 'created' && !isPaymentCreated && (
-        <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick}></CustomButton>
-      )}
-      <CustomButton id="navigation-button" buttonText="Go back" onClick={handleGoBack}></CustomButton>
-    </Flex>
+    <>
+      <MetaTags title="Order" description="Order summary" />
+      <Flex direction="column" minH="100vh" align="center" justify="flex-start" px={4} py={10}>
+        <Heading as="h1" size="lg" mb={6} textAlign="center">
+          Order Summary
+        </Heading>
+
+        <Flex bg="gray.50" p={8} borderRadius="2xl" boxShadow="md" w="full" maxW="lg" align="center">
+          <VStack spacing={4} align="stretch" mt={4}>
+            <Text fontSize="md">
+              <chakra.b>Order ID:</chakra.b> {orderId}
+            </Text>
+            <Text fontSize="md">
+              <chakra.b>Event:</chakra.b> {eventName}
+            </Text>
+            <Text fontSize="md">
+              <chakra.b>Status:</chakra.b> {status}
+            </Text>
+            {status === 'CREATED' && !isPaymentCreated && (
+              <Text fontSize="md">
+                <chakra.b>Amount to Pay:</chakra.b> {amount} SEK
+              </Text>
+            )}
+            <Box id="zco-loader" mt={4}></Box>
+          </VStack>
+        </Flex>
+        <VStack spacing={4} mt={10}>
+          {status === 'CREATED' && !isPaymentCreated && (
+            <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick} />
+          )}
+          <CustomButton id="navigation-button" buttonText="Go back" onClick={handleGoBack} />
+        </VStack>
+      </Flex>
+    </>
   )
 }
 

@@ -24,7 +24,7 @@ const GetOrderForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
   }
 
   const handleSave = () => {
-    const idPattern = /^[0-9a-f]{24}$/
+    const idPattern = /^c[a-z0-9]{24,32}$/
 
     // Function to validate the ID
     function validateId(id) {
