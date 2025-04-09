@@ -23,7 +23,6 @@ const TopBar = ({ showDropShadow = true, useBlurEffect = true }: TopBarTypes) =>
     position="fixed"
     style={{
       ...(showDropShadow && dropShadow),
-      ...(useBlurEffect && blurEffect),
 
       justifyContent: 'center',
       zIndex: 999,

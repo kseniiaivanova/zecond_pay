@@ -4,11 +4,7 @@ import CustomButton from 'src/components/CustomButton'
 
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa'
 
-const Event = () => {
-  const handleCreateOrder = () => {
-    console.log(events)
-  }
-
+const Event = ({ handleCreateOrder }) => {
   return (
     <Box>
       <Heading as="h1" size="xl" mt={[12, 8, 8]} textAlign="center">
@@ -19,7 +15,7 @@ const Event = () => {
           {events.map((event) => (
             <ListItem key={event.id} bg="gray.50" p={6} borderRadius="xl" boxShadow="md">
               <Flex gap={6} direction={['column', 'row', 'row']}>
-                <Image src={event.image} alt={event.title} borderRadius="lg" mb={4} maxW="400px" />
+                <Image src={event.image} alt={event.title} borderRadius="lg" maxW="400px" />
                 <Stack spacing={2} ml={[0, 6, 6]}>
                   <Text fontSize="xl" fontWeight="bold">
                     {event.title}
@@ -35,7 +31,7 @@ const Event = () => {
 
                   <Text>{event.description}</Text>
                   <Text fontWeight="bold">Price: {event.price} SEK</Text>
-                  <CustomButton id="payment_button" buttonText="Buy Ticket" onClick={handleCreateOrder} />
+                  <CustomButton id="payment_button" buttonText="Buy Ticket" onClick={() => handleCreateOrder(event)} />
                 </Stack>
               </Flex>
             </ListItem>

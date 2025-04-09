@@ -9,7 +9,7 @@ const ThankYouPage = () => {
   }
   return (
     <>
-      <MetaTags title="Eventura" description="Thank You" />
+      <MetaTags title="Thank you" description="Thank You" />
       <Flex direction="column" minH="1000px" align="center" justify="flex-start" p={8}>
         <Heading as="h1" size="lg" noOfLines={1} my={8}>
           Thank you! Your order is successfully paid

@@ -3,63 +3,53 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import React, { useContext, useState } from 'react'
 
-import { OrderInputValue } from 'src/types/orderInput'
-import { GET_ORDER } from 'src/apollo/orders'
-import { useQuery } from '@apollo/client'
-import GetOrderForm from 'src/components/GetOrderForm/GetOrderForm'
+import { useMutation } from '@apollo/client'
+
+import { CREATE_ORDER } from 'src/apollo/orders'
 import { useToast } from 'src/components/Toaster'
 import EventCard from 'src/components/EventCard/EventCard'
 
 const MainPage = () => {
-  //const { setOrderStatus } = useContext(OrderContext)
-
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [value, setValue] = useState<OrderInputValue | null>(null)
   const { errorToast } = useToast()
 
-  const {
-    data,
-    loading: queryLoading,
-    error,
-  } = useQuery(GET_ORDER, {
-    variables: { id: value?.orderId || '' },
-    skip: !value || !value.orderId,
-
+  const [createOrder, { loading, error }] = useMutation(CREATE_ORDER, {
     onError: (error) => {
       errorToast('Something went wrong')
-      setLoading(false)
     },
-
     onCompleted: (data) => {
-      if (data && data.getOrder) {
-        setValue(data.getOrder)
-        setLoading(false)
-        setFormSubmitted(true)
-
-        // Navigate to the order page
-        navigate(
-          routes.order({ orderId: data.getOrder.id, status: data.getOrder.status, amount: data.getOrder.amount })
-        )
-      } else {
-        errorToast('ID not found, try again!')
-        setLoading(false)
-      }
+      console.log('Order created:', data)
+      navigate(
+        routes.order({
+          orderId: data.createOrder.id,
+          status: data.createOrder.status,
+          amount: data.createOrder.amount,
+          eventName: data.createOrder.eventName,
+        })
+      )
     },
   })
 
-  const onSave = (value: OrderInputValue) => {
-    setValue(value)
-    setFormSubmitted(true)
+  const handlePurchase = (event) => {
+    createOrder({
+      variables: {
+        input: {
+          status: 'CREATED',
+          amount: event.price,
+          paymentId: new Date().toISOString(),
+          orderedAt: new Date().toISOString(),
+          paidAt: null,
+          eventId: event.id,
+          eventName: event.title,
+        },
+      },
+    })
   }
 
   return (
     <>
-      <MetaTags title="Eventura | Home" description="Your event ticket checkout" />
+      <MetaTags title="Home" description="Your event ticket checkout" />
       <Flex direction="column" alignItems="center" minH="100vh">
-        <EventCard />
-        {loading && <Spinner />}
-        <GetOrderForm loading={loading} onSave={onSave} savedValue={value} />
+        <EventCard handleCreateOrder={handlePurchase} />
       </Flex>
     </>
   )
