@@ -10,12 +10,12 @@ const Event = ({ handleCreateOrder }) => {
       <Heading as="h1" size="xl" mt={[12, 8, 8]} textAlign="center">
         Upcoming Events
       </Heading>
-      <Flex direction="column" px={4} py={8} w="full">
-        <UnorderedList spacing={6} styleType="none">
+      <Flex direction="column" w="full" alignItems="center" px={4} py={8}>
+        <UnorderedList spacing={6} styleType="none" ml={0}>
           {events.map((event) => (
             <ListItem key={event.id} bg="gray.50" p={6} borderRadius="xl" boxShadow="md">
               <Flex gap={6} direction={['column', 'row', 'row']}>
-                <Image src={event.image} alt={event.title} borderRadius="lg" maxW="400px" />
+                <Image src={event.image} alt={event.title} borderRadius="lg" maxW="400px" w="full" />
                 <Stack spacing={2} ml={[0, 6, 6]}>
                   <Text fontSize="xl" fontWeight="bold">
                     {event.title}

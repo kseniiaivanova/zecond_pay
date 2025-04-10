@@ -3,16 +3,19 @@ import React from 'react'
 import { Box, BoxProps } from '@chakra-ui/react'
 
 const ZecPaySVG = () => (
-  <svg width="80px" height="126px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M31 4H16L10 27H18L14 44L40 16H28L31 4Z"
-      fill="#2F88FF"
-      stroke="#000000"
-      strokeWidth="4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path d="M21 11L19 19" stroke="white" strokeWidth="4" strokeLinecap="round" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="50"
+    height="50"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="lucide lucide-zap-icon lucide-zap"
+  >
+    <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
   </svg>
 )
 
