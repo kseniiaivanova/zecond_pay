@@ -38,7 +38,7 @@ export const events: Event[] = [
   },
   {
     id: '7d3ebd49-d310-42f1-8fa1-13b6012cf088',
-    title: 'React & GraphQL Bootcamp',
+    title: 'React and GraphQL Bootcamp',
     date: '2025-07-05',
     image: '/images/react.jpg',
     location: 'Lindholmen, Gothenburg',

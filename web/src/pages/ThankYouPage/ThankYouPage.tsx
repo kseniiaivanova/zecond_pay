@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Stack, Text, chakra } from '@chakra-ui/react'
+import { Box, Flex, Image, Heading } from '@chakra-ui/react'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import CustomButton from 'src/components/CustomButton/CustomButton'
@@ -22,7 +22,7 @@ const ThankYouPage = () => {
         textAlign="center"
       >
         <Box mb={6}>
-          <img src="/images/success.png" alt="Success celebration" style={{ maxWidth: '300px', width: '100%' }} />
+          <Image src="/images/success.png" alt="Success celebration" maxW="300px" w="100%" />
         </Box>
 
         <Heading as="h1" size="lg" mb={6}>
