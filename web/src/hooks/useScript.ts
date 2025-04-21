@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
 const useScript = ({ src, id, attributes }) => {
+
   useEffect(() => {
+
     const script = document.createElement('script');
     script.src = src;
     script.id = id;
@@ -12,11 +14,12 @@ const useScript = ({ src, id, attributes }) => {
     });
 
     document.body.appendChild(script);
+    console.log('script', script)
 
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [attributes]);
 };
 
 export default useScript;

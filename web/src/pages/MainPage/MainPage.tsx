@@ -17,14 +17,7 @@ const MainPage = () => {
       errorToast('Something went wrong')
     },
     onCompleted: (data) => {
-      navigate(
-        routes.order({
-          orderId: data.createOrder.id,
-          status: data.createOrder.status,
-          amount: data.createOrder.amount,
-          eventName: data.createOrder.eventName,
-        })
-      )
+      navigate(routes.order({ orderId: data.createOrder.id }))
     },
   })
 
@@ -39,6 +32,8 @@ const MainPage = () => {
           paidAt: null,
           eventId: event.id,
           eventName: event.title,
+          eventLocation: event.location,
+          eventDate: event.date,
         },
       },
     })
