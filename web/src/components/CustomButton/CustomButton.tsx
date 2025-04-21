@@ -9,8 +9,6 @@ const CustomButton = ({ buttonText, onClick, id }) => {
       size="md"
       onClick={onClick}
       id={id}
-      mt={4}
-      mb={4}
       mx={['auto', 'initial']}
       w="200px"
       textTransform="uppercase"
