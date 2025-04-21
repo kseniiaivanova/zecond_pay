@@ -1,5 +1,7 @@
 export const ORDER = `
 id
+eventDate
+eventLocation
 status
 amount
 paymentId

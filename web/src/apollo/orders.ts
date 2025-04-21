@@ -11,6 +11,8 @@ export const GET_ORDER= gql`
     paidAt
     eventId
     eventName
+    eventDate
+    eventLocation
   }
 }
 `
@@ -25,6 +27,8 @@ export const CREATE_ORDER= gql`
     paidAt
     eventId
     eventName
+    eventDate
+    eventLocation
   }
 }
 `

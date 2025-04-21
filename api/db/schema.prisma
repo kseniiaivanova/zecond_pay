@@ -13,15 +13,17 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 // TODO: Please remove the following example:
 model Order {
-  id        String    @id @default(cuid()) @map("_id")
-  status    String
-  amount    Float
-  paymentId String?   @unique
-  payment   Payment?  @relation(fields: [paymentId], references: [id])
-  orderedAt DateTime  @default(now()) @map("ordered_at")
-  paidAt    DateTime? @map("paid_at")
-  eventId   String
-  eventName String
+  id            String    @id @default(cuid()) @map("_id")
+  status        String
+  amount        Float
+  paymentId     String?   @unique
+  payment       Payment?  @relation(fields: [paymentId], references: [id])
+  orderedAt     DateTime  @default(now()) @map("ordered_at")
+  paidAt        DateTime? @map("paid_at")
+  eventId       String
+  eventName     String
+  eventDate     String
+  eventLocation String
 
   @@map("orders")
 }

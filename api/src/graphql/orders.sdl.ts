@@ -1,6 +1,8 @@
 export const schema = gql`
   type Order {
     id: String!
+    eventDate: String
+    eventLocation: String
     status: String!
     amount: Float!
     paymentId: String
@@ -24,6 +26,8 @@ export const schema = gql`
     paidAt: DateTime
     eventId: String!
     eventName: String!
+    eventDate: String
+    eventLocation: String
   }
 
   input UpdateOrderInput {
