@@ -1,5 +1,5 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
-import { db } from 'src/lib/db';
+
 import { logger } from 'src/lib/logger'
 
 /**
@@ -19,35 +19,44 @@ import { logger } from 'src/lib/logger'
  * function, and execution environment.
  */
 export const handler = async (event: APIGatewayEvent, _context: Context) => {
-  logger.info(`${event.httpMethod} ${event.path}: checkPaymentStatus function`)
+  logger.info(`${event.httpMethod} ${event.path}: sendEmail function`)
 
   try {
-    const paymentData = JSON.parse(event.body)
+    const { email, orderId, eventName, eventDate, amount } = JSON.parse(event.body || '{}')
 
-    const zaverPaymentId = paymentData.paymentId
-    const payment = await db.payment.findUnique({
-      where: { zaverPaymentId },
-    })
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email || !emailRegex.test(email)) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Invalid email address' }),
+      }
+    }
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ status: payment?.paymentStatus || 'UNKNOWN', orderId: payment?.orderId }),
-  }} catch (error) {
-    // Handle any errors that occur during processing
-    logger.error('Error processing payment callback:', error);
-
-    // Respond with an error status
-    return {
-      statusCode: 500,
+    // Send to Make webhook
+    const response = await fetch('https://hook.eu2.make.com/9ngrpd4apaw0vigz2xqytr6isfsr7ch0', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        error: 'Internal Server Error',
-      }),
-    };
+      body: JSON.stringify({ email, orderId, eventName, eventDate, amount }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Webhook failed with status ${response.status}`)
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'Email sent successfully' }),
+    }
+
+
+  } catch (error: any) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: error.message }),
+      }
+    }
   }
-}
+
