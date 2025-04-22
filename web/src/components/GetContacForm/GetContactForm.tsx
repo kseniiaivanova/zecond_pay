@@ -20,7 +20,7 @@ const GetContactForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
   }
   return (
     <Flex direction="column">
-      <HStack alignItems="flex-end" gap={4} justify="space-between" mt={6}>
+      <Flex alignItems="flex-end" direction={['column', 'row', 'row']} gap={4} justify="space-between" mt={6}>
         <FormControl>
           <FormLabel color="gray.600" fontSize="sm">
             Enter email to get your ticket
@@ -34,7 +34,7 @@ const GetContactForm = ({ loading, onSave = () => {}, savedValue }: Props) => {
           />
         </FormControl>
         <CustomButton id="get-contact-button" buttonText="Get ticket" onClick={() => onSave(inputValue)} />
-      </HStack>
+      </Flex>
     </Flex>
   )
 }

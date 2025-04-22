@@ -8,10 +8,13 @@ import { useToast } from 'src/components/Toaster'
 import { GET_ORDER } from 'src/apollo/orders'
 import { useQuery } from '@apollo/client'
 import PageLoading from 'src/components/PageLoading/PageLoading'
+import { useState } from 'react'
 
 const ThankYouPage = () => {
   const { orderId } = useParams()
   const { errorToast } = useToast()
+
+  const [emailSent, setEmailSent] = useState(false)
 
   const { data, loading: orderLoading } = useQuery(GET_ORDER, {
     variables: { id: orderId },
@@ -21,7 +24,6 @@ const ThankYouPage = () => {
   })
 
   const order = data?.order
-  console.log(orderId)
 
   const handleGoBack = () => {
     navigate(routes.welcome())
@@ -45,12 +47,9 @@ const ThankYouPage = () => {
     const result = await response.json()
     if (!response.ok) {
       errorToast(result.message)
+      return
     } else {
-      return (
-        <Box>
-          <Text>HELLLL</Text>
-        </Box>
-      )
+      setEmailSent(true)
     }
   }
 
@@ -75,7 +74,13 @@ const ThankYouPage = () => {
           </Stack>
         )}
 
-        <GetContactForm onSave={handleSaveContact} />
+        {emailSent ? (
+          <Box>
+            <Text fontSize="lg">Your ticket is sent!</Text>
+          </Box>
+        ) : (
+          <GetContactForm onSave={handleSaveContact} />
+        )}
         <Stack mt={24}>
           <CustomButton id="navigation-button" buttonText="to main page" onClick={handleGoBack} />
         </Stack>
