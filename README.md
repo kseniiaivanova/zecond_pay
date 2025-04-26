@@ -46,8 +46,10 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 
 ## Quick Links
 
-- [Eventura](https://zaverpay.netlify.app)
 - [Zaver's homepage](https://zaver.com)
 - [RedwoodJS](https://redwoodjs.com)
 - [Make](https://www.make.com)
 
+
+## Live App 
+[Eventura](https://zaverpay.netlify.app)
