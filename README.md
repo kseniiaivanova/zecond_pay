@@ -20,7 +20,7 @@ Welcome to Eventura! This is an example of a RedwoodJS-Zaver integration made as
 
 ## Preview
 
-![App Demo](web/public/eventura.gif)
+![App Demo](https://github.com/kseniiaivanova/zecond_pay/blob/main/web/public/Eventura.gif)
 
 
 ## Getting started
