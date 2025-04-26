@@ -1,6 +1,6 @@
 # README
 
-Welcome to Eventura! This is an example of a RedwoodJS-Zaver integration made as an event booking simulation. Integration allows companies using [RedwoodJS](https://redwoodjs.com) accept online payments. No real payments are made with this app so you can test the payment flow. 
+Welcome to Eventura! This is an example of a RedwoodJS-Zaver integration made as an event booking simulation. Integration allows companies using [RedwoodJS](https://redwoodjs.com) accept online payments. No real payments are made with this app so you can test the payment flow. The tickets are sent to user's mail via [Make](https://www.make.com/en) automation 
 
 > **Prerequisites**
 >
@@ -41,7 +41,8 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 
 ## Quick Links
 
+- [Eventura](https://zaverpay.netlify.app)
 - [Zaver's homepage](https://zaver.com)
 - [RedwoodJS](https://redwoodjs.com)
-- [Eventura](https://zaverpay.netlify.app)
+- [Make](https://www.make.com)
 
