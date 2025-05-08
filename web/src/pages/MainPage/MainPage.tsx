@@ -1,19 +1,20 @@
-import { Box, Flex, Spinner } from '@chakra-ui/react'
-import { Link, navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-import React, { useContext, useState } from 'react'
+import React from 'react'
 
 import { useMutation } from '@apollo/client'
+import { Flex } from '@chakra-ui/react'
+
+import { navigate, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 
 import { CREATE_ORDER } from 'src/apollo/orders'
-import { useToast } from 'src/components/Toaster'
 import EventCard from 'src/components/EventCard/EventCard'
+import { useToast } from 'src/components/Toaster'
 
 const MainPage = () => {
   const { errorToast } = useToast()
 
-  const [createOrder, { loading, error }] = useMutation(CREATE_ORDER, {
-    onError: (error) => {
+  const [createOrder] = useMutation(CREATE_ORDER, {
+    onError: (_error) => {
       errorToast('Something went wrong')
     },
     onCompleted: (data) => {

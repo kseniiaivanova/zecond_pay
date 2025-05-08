@@ -1,39 +1,37 @@
 import gql from 'graphql-tag'
 
-export const GET_ORDER= gql`
+export const GET_ORDER = gql`
   query GetOrder($id: String!) {
     order(id: $id) {
-    id
-    status
-    amount
-    paymentId
-    orderedAt
-    paidAt
-    eventId
-    eventName
-    eventDate
-    eventLocation
+      id
+      status
+      amount
+      paymentId
+      orderedAt
+      paidAt
+      eventId
+      eventName
+      eventDate
+      eventLocation
+    }
   }
-}
 `
-export const CREATE_ORDER= gql`
+export const CREATE_ORDER = gql`
   mutation CreateOrder($input: CreateOrderInput!) {
     createOrder(input: $input) {
-    id
-    status
-    amount
-    paymentId
-    orderedAt
-    paidAt
-    eventId
-    eventName
-    eventDate
-    eventLocation
+      id
+      status
+      amount
+      paymentId
+      orderedAt
+      paidAt
+      eventId
+      eventName
+      eventDate
+      eventLocation
+    }
   }
-}
 `
-
-
 
 export const UPDATE_ORDER = gql`
   mutation UpdateOrder($id: String!, $input: UpdateOrderInput!) {
