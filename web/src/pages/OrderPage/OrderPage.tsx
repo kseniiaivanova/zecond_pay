@@ -1,14 +1,18 @@
-import { Flex, Text, Heading, chakra, VStack, Box } from '@chakra-ui/react'
-import { navigate, routes, useParams } from '@redwoodjs/router'
-import useScript from '../../hooks/useScript'
-import CustomButton from 'src/components/CustomButton/CustomButton'
-import { useMutation, useQuery } from '@apollo/client'
-import { CREATE_PAYMENT } from 'src/apollo/payments'
-import { useToast } from 'src/components/Toaster'
 import { useEffect, useState } from 'react'
+
+import { useMutation, useQuery } from '@apollo/client'
+import { Flex, Text, Heading, chakra, VStack, Box } from '@chakra-ui/react'
+
+import { navigate, routes, useParams } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+
 import { GET_ORDER } from 'src/apollo/orders'
+import { CREATE_PAYMENT } from 'src/apollo/payments'
+import CustomButton from 'src/components/CustomButton/CustomButton'
 import PageLoading from 'src/components/PageLoading/PageLoading'
+import { useToast } from 'src/components/Toaster'
+
+import useScript from '../../hooks/useScript'
 
 const OrderPage = () => {
   const { orderId } = useParams()
