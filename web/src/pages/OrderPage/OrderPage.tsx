@@ -18,7 +18,7 @@ const OrderPage = () => {
   const { orderId } = useParams()
   const { errorToast } = useToast()
   const [isPaymentCreated, setIsPaymentCreated] = useState(false)
-  const [zaverPaymentId, setZaverPaymentId] = useState(null)
+  const [paymentData, setPaymentData] = useState(null)
 
   const { data, loading: orderLoading } = useQuery(GET_ORDER, {
     variables: { id: orderId },
@@ -39,33 +39,22 @@ const OrderPage = () => {
     },
   })
 
-  useEffect(() => {
-    if (!zaverPaymentId) return
-
-    const interval = setInterval(async () => {
-      const response = await fetch('/.netlify/functions/checkPaymentStatus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ paymentId: zaverPaymentId }),
-      })
-
-      const result = await response.json()
-      if (result.status === 'SETTLED') {
-        clearInterval(interval)
-        navigate(`/thank-you?orderId=${orderId}`)
-      }
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [zaverPaymentId])
-
+  // Load the script first with a placeholder token
   useScript({
     src: 'https://iframe-checkout.test.zaver.com/loader/loader-v1.js',
     id: 'zco-loader',
-    attributes: { 'zco-token': 'zco-token' },
+    attributes: { 'zco-token': paymentData?.token || 'placeholder' },
   })
+
+  // Update the token when payment data is available
+  useEffect(() => {
+    if (paymentData?.token) {
+      const scriptElement = document.getElementById('zco-loader')
+      if (scriptElement) {
+        scriptElement.setAttribute('zco-token', paymentData.token)
+      }
+    }
+  }, [paymentData?.token])
 
   const handleButtonClick = async () => {
     try {
@@ -93,35 +82,53 @@ const OrderPage = () => {
 
       if (response.ok) {
         const data = await response.json()
-        const zcoToken = data.token
-        const zaverPaymentId = data.paymentId
-        setZaverPaymentId(zaverPaymentId)
 
-        const paymentStatus = data.paymentStatus
-
-        // Set the zco-token attribute for the script
-
-        const scriptElement = document.getElementById('zco-loader')
-        scriptElement.setAttribute('zco-token', zcoToken)
+        // Set payment data
+        setPaymentData({
+          token: data.token,
+          paymentId: data.paymentId,
+          status: data.paymentStatus,
+        })
 
         // Create the payment input object
         const paymentInput = {
           input: {
             orderId: orderId,
-            zaverPaymentId: zaverPaymentId,
-            paymentStatus: paymentStatus,
+            zaverPaymentId: data.paymentId,
+            paymentStatus: data.paymentStatus,
           },
         }
 
         // Call the GraphQL mutation with the payment input
         createPayment({ variables: paymentInput })
-      } else {
-        console.error('Fetch failed:', response.statusText)
       }
     } catch (error) {
       console.error('An error occurred during fetch:', error)
     }
   }
+
+  // Payment status check effect
+  useEffect(() => {
+    if (!paymentData?.paymentId) return
+
+    const interval = setInterval(async () => {
+      const response = await fetch('/.netlify/functions/checkPaymentStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ paymentId: paymentData.paymentId }),
+      })
+
+      const result = await response.json()
+      if (result.status === 'SETTLED') {
+        clearInterval(interval)
+        navigate(`/thank-you?orderId=${orderId}`)
+      }
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [paymentData?.paymentId, orderId])
 
   const handleGoBack = () => {
     navigate(routes.welcome())
