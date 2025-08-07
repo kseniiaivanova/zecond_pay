@@ -99,7 +99,7 @@ const ThankYouPage = () => {
         ) : (
           <GetContactForm onSave={handleSaveContact} />
         )}
-        <Stack mt={24}>
+        <Stack my={[4, 24]}>
           <CustomButton id="navigation-button" buttonText="to main page" onClick={handleGoBack} />
         </Stack>
       </Flex>
