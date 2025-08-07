@@ -1,17 +1,38 @@
-# README
+# Eventura – RedwoodJS + Zaver Integration
 
-Welcome to Eventura! This is an example of a RedwoodJS-Zaver integration made as an event booking simulation. Integration allows companies using [RedwoodJS](https://redwoodjs.com) accept online payments. No real payments are made with this app so you can test the payment flow. The tickets are sent to user's mail via [Make](https://www.make.com/en) automation.
+**Eventura** is a demo web app simulating an event booking and ticketing flow with online payment support. It integrates [Zaver](https://zaver.com) into a [RedwoodJS](https://redwoodjs.com) project, demonstrating how companies can accept payments.
 
-The target audience of the application can be defined as startups using RedwoodJS in development and
-selling so-called durable goods and services.
+This project runs in a test environment — no real payments are processed. After completing a booking, the app sends a simulated ticket via email using [Make](https://www.make.com/en) automation.
 
-> **Prerequisites**
->
-> - Redwood requires [Node.js](https://nodejs.org/en/) (=18.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
-> - Are you on Windows? For best results, follow our [Windows development setup](https://redwoodjs.com/docs/how-to/windows-development-setup) guide
+> **Target audience**: Developers and startups using RedwoodJS who want to explore payment integration in projects involving product or service sales.
 
+---
 
-## Stack
+## 🌐 Live Demo
+
+👉 [Try Eventura live](https://zaverpay.netlify.app)
+
+---
+
+## 🔍 Preview
+
+Here’s what the payment flow looks like:
+
+![App Demo](https://github.com/kseniiaivanova/zecond_pay/blob/main/web/public/Eventura.gif)
+
+---
+
+## 🧠 UX Considerations
+
+The application was designed with a focus on simplicity, clarity, and responsiveness. While advanced styling was not the main priority, key UX goals included:
+
+- Guiding users step-by-step through the booking and payment process
+- Providing clear status feedback and confirmation
+- Ensuring visual clarity and accessibility on desktop and mobile
+
+---
+
+## 🧱 Tech Stack
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -20,39 +41,16 @@ selling so-called durable goods and services.
 ![Yarn](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 
+---
 
-## Preview
+## ⚙️ Getting Started
 
-![App Demo](https://github.com/kseniiaivanova/zecond_pay/blob/main/web/public/Eventura.gif)
+> **Prerequisites**
+> - [Node.js](https://nodejs.org/en/) (v18.x)
+> - [Yarn](https://yarnpkg.com/) (v1.15+)
+> - For Windows, see Redwood’s [Windows setup guide](https://redwoodjs.com/docs/how-to/windows-development-setup)
 
+Clone the repo and install dependencies:
 
-## Getting started
-
-Clone this repo. Run:
-
-```
-cd zecond
-```
-
-```
-yarn install
-```
-
-Then start the development server:
-
-```
-yarn redwood dev
-```
-
-Your browser should automatically open to [http://localhost:8910](http://localhost:8910) where you'll see the welcome page.
-
-
-## Quick Links
-
-- [Zaver's homepage](https://zaver.com)
-- [RedwoodJS](https://redwoodjs.com)
-- [Make](https://www.make.com)
-
-
-## Live App 
-[Eventura](https://zaverpay.netlify.app)
+```bash
+git clone https://g
