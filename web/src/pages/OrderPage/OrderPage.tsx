@@ -19,6 +19,7 @@ const OrderPage = () => {
   const { errorToast } = useToast()
   const [isPaymentCreated, setIsPaymentCreated] = useState(false)
   const [paymentData, setPaymentData] = useState(null)
+  const [isZaverInitialized, setIsZaverInitialized] = useState(false)
 
   const { data, loading: orderLoading } = useQuery(GET_ORDER, {
     variables: { id: orderId },
@@ -39,22 +40,23 @@ const OrderPage = () => {
     },
   })
 
-  // Load the script first with a placeholder token
+  // Load the script only once
   useScript({
     src: 'https://iframe-checkout.test.zaver.com/loader/loader-v1.js',
     id: 'zco-loader',
-    attributes: { 'zco-token': paymentData?.token || 'placeholder' },
+    attributes: { 'zco-token': 'placeholder' },
   })
 
-  // Update the token when payment data is available
+  // Initialize Zaver only once when payment data is available
   useEffect(() => {
-    if (paymentData?.token) {
+    if (paymentData?.token && !isZaverInitialized) {
       const scriptElement = document.getElementById('zco-loader')
       if (scriptElement) {
         scriptElement.setAttribute('zco-token', paymentData.token)
+        setIsZaverInitialized(true)
       }
     }
-  }, [paymentData?.token])
+  }, [paymentData?.token, isZaverInitialized])
 
   const handleButtonClick = async () => {
     try {
