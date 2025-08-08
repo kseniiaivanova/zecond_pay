@@ -65,7 +65,7 @@ const ThankYouPage = () => {
   return (
     <>
       <MetaTags title="Thank you" description="Thank You" />
-      <Flex direction="column" h="100vh" align="center" justify="center" px={4} py={10} bg="#FFF4E5" textAlign="center">
+      <Flex direction="column" h="100%" align="center" justify="center" px={4} py={10} bg="#FFF4E5" textAlign="center">
         {!orderLoading && (
           <Box mb={6}>
             <Image
