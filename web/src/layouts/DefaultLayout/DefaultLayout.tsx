@@ -1,5 +1,6 @@
-import { Box } from '@chakra-ui/react'
 import React from 'react'
+
+import { Box } from '@chakra-ui/react'
 
 import Footer from 'src/components/Footer/Footer'
 import TopBar from 'src/components/TopBar/TopBar'
@@ -12,7 +13,7 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (
     <Box height="100vh" overflow="auto" w="100%">
       <TopBar />
-      <Box as="main" overflowX="hidden" bg="white" pt={['80px', '110px']}>
+      <Box as="main" overflowX="hidden" bg="white" pt="80px">
         {children}
         <Footer />
       </Box>
