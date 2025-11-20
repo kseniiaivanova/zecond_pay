@@ -53,4 +53,4 @@ The application was designed with a focus on simplicity, clarity, and responsive
 Clone the repo and install dependencies:
 
 ```bash
-git clone https://g
+[git clone https://g](https://github.com/kseniiaivanova/zecond_pay.git)
