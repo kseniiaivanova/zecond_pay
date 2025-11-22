@@ -140,7 +140,7 @@ const OrderPage = () => {
         {!orderLoading && (
           <>
             <Heading as="h1" size="lg" mb={6} textAlign="center" color="gray.800">
-              Order Summary
+              Sammanfattning av order
             </Heading>
 
             <Flex

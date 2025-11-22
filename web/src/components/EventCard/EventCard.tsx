@@ -31,7 +31,7 @@ const Event = ({ handleCreateOrder }) => {
 
                   <Text>{event.description}</Text>
                   <Text fontWeight="bold">Price: {event.price} SEK</Text>
-                  <CustomButton id="payment_button" buttonText="Buy Ticket" onClick={() => handleCreateOrder(event)} />
+                  <CustomButton id="payment_button" buttonText="Köp biljett" onClick={() => handleCreateOrder(event)} />
                 </Stack>
               </Flex>
             </ListItem>

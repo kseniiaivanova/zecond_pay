@@ -43,7 +43,7 @@ export default DevFatalErrorPage ||
             fontWeight: 600,
           }}
         >
-          Oops... Something unexpected happened
+          Oops... Något oväntat hände
         </h1>
 
         <p
@@ -54,8 +54,8 @@ export default DevFatalErrorPage ||
             lineHeight: 1.5,
           }}
         >
-          Our system hit a snag and could not complete your request. This is not your fault. You can try again in a
-          moment or return to the start.
+          Systemet stötte på ett problem och kunde inte slutföra din förfrågan. Det här är inte ditt fel. Du kan prova
+          igen om en stund eller gå tillbaka till startsidan.
         </p>
 
         <a
@@ -72,7 +72,7 @@ export default DevFatalErrorPage ||
             textTransform: 'uppercase',
           }}
         >
-          Go back to Eventura
+          Tillbaka till Eventura
         </a>
       </section>
     </main>

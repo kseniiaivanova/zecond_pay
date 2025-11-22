@@ -9,7 +9,7 @@ const Footer = () => {
           <Link href="https://zaver.com" isExternal textDecoration="underline">
             Zaver
           </Link>{' '}
-          @2024
+          @2025
         </Text>
       </Flex>
     </Flex>
