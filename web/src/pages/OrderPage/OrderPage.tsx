@@ -121,7 +121,7 @@ const OrderPage = () => {
       const result = await response.json()
       if (result.status === 'SETTLED') {
         clearInterval(interval)
-        navigate(`/thank-you?orderId=${orderId}`)
+        navigate(routes.thankYou({ orderId }))
       }
     }, 3000)
 
