@@ -12,14 +12,11 @@ import CustomButton from 'src/components/CustomButton/CustomButton'
 import PageLoading from 'src/components/PageLoading/PageLoading'
 import { useToast } from 'src/components/Toaster'
 
-import useScript from '../../hooks/useScript'
-
 const OrderPage = () => {
   const { orderId } = useParams()
   const { errorToast } = useToast()
   const [isPaymentCreated, setIsPaymentCreated] = useState(false)
   const [paymentData, setPaymentData] = useState(null)
-  const [isZaverInitialized, setIsZaverInitialized] = useState(false)
 
   const { data, loading: orderLoading } = useQuery(GET_ORDER, {
     variables: { id: orderId },
@@ -34,29 +31,38 @@ const OrderPage = () => {
     onError: () => {
       errorToast('Failed to create payment')
     },
-
     onCompleted: (data) => {
       setIsPaymentCreated(true)
     },
   })
 
-  // Load the script only once
-  useScript({
-    src: 'https://iframe-checkout.test.zaver.com/loader/loader-v1.js',
-    id: 'zco-loader',
-    attributes: { 'zco-token': 'placeholder' },
-  })
-
-  // Initialize Zaver only once when payment data is available
+  // Load Zaver script only when we have the token
   useEffect(() => {
-    if (paymentData?.token && !isZaverInitialized) {
-      const scriptElement = document.getElementById('zco-loader')
-      if (scriptElement) {
-        scriptElement.setAttribute('zco-token', paymentData.token)
-        setIsZaverInitialized(true)
-      }
+    if (!paymentData?.token) return
+
+    // Check if script already exists
+    const existingScript = document.getElementById('zco-loader')
+    if (existingScript) {
+      // Script exists, just update the token
+      existingScript.setAttribute('zco-token', paymentData.token)
+      // Manually trigger Zaver's load function if available
+
+      return
     }
-  }, [paymentData?.token, isZaverInitialized])
+
+    const script = document.createElement('script')
+    script.src = 'https://iframe-checkout.test.zaver.com/loader/loader-v1.js'
+    script.id = 'zco-loader'
+    document.body.appendChild(script)
+
+    // Wait for script to load, THEN set the token
+    // This triggers Zaver's MutationObserver
+    script.onload = () => {
+      setTimeout(() => {
+        script.setAttribute('zco-token', paymentData.token)
+      }, 100)
+    }
+  }, [paymentData?.token])
 
   const handleButtonClick = async () => {
     try {
@@ -68,17 +74,7 @@ const OrderPage = () => {
         body: JSON.stringify({
           title: 'Test request',
           amount: order.amount,
-          currency: 'SEK',
-          market: 'SE',
-          lineItems: [
-            {
-              name: 'The first test item',
-              totalAmount: order.amount,
-              unitPrice: order.amount,
-              quantity: 1,
-              taxRatePercent: 6.0,
-            },
-          ],
+          eventName: order.eventName,
         }),
       })
 
@@ -125,7 +121,7 @@ const OrderPage = () => {
       const result = await response.json()
       if (result.status === 'SETTLED') {
         clearInterval(interval)
-        navigate(`/thank-you?orderId=${orderId}`)
+        navigate(routes.thankYou({ orderId }))
       }
     }, 3000)
 
@@ -144,7 +140,7 @@ const OrderPage = () => {
         {!orderLoading && (
           <>
             <Heading as="h1" size="lg" mb={6} textAlign="center" color="gray.800">
-              Order Summary
+              Sammanfattning av order
             </Heading>
 
             <Flex
@@ -180,7 +176,7 @@ const OrderPage = () => {
                   </Text>
                 )}
               </VStack>
-              <Box id="zco-loader" mt={6}></Box>
+              <Box id="zco-container" mt={6}></Box>
             </Flex>
 
             <VStack spacing={6} mt={10} align="center">
@@ -195,4 +191,5 @@ const OrderPage = () => {
     </>
   )
 }
+
 export default OrderPage

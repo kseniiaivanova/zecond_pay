@@ -12,46 +12,68 @@ import { DevFatalErrorPage } from '@redwoodjs/web/dist/components/DevFatalErrorP
 
 export default DevFatalErrorPage ||
   (() => (
-    <main>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-              html, body {
-                margin: 0;
-              }
-              html * {
-                box-sizing: border-box;
-              }
-              main {
-                display: flex;
-                align-items: center;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-                text-align: center;
-                background-color: #E2E8F0;
-                height: 100vh;
-              }
-              section {
-                background-color: white;
-                border-radius: 0.25rem;
-                width: 32rem;
-                padding: 1rem;
-                margin: 0 auto;
-                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-              }
-              h1 {
-                font-size: 2rem;
-                margin: 0;
-                font-weight: 500;
-                line-height: 1;
-                color: #2D3748;
-              }
-            `,
+    <main
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#f4f6f8',
+        height: '100vh',
+        padding: '1rem',
+      }}
+    >
+      <section
+        style={{
+          width: '100%',
+          maxWidth: '480px',
+          background: 'white',
+          borderRadius: '12px',
+          padding: '2rem',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          textAlign: 'center',
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Raleway", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         }}
-      />
-      <section>
-        <h1>
-          <span>Something went wrong</span>
+      >
+        <h1
+          style={{
+            margin: '0 0 1rem 0',
+            fontSize: '1.75rem',
+            color: '#1a202c',
+            fontWeight: 600,
+          }}
+        >
+          Oops... Något oväntat hände
         </h1>
+
+        <p
+          style={{
+            margin: '0 0 1.5rem 0',
+            color: '#4a5568',
+            fontSize: '1rem',
+            lineHeight: 1.5,
+          }}
+        >
+          Systemet stötte på ett problem och kunde inte slutföra din förfrågan. Det här är inte ditt fel. Du kan prova
+          igen om en stund eller gå tillbaka till startsidan.
+        </p>
+
+        <a
+          href="/"
+          style={{
+            display: 'inline-block',
+            padding: '0.75rem 1.25rem',
+            background: '#6B46C1',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            textTransform: 'uppercase',
+          }}
+        >
+          Tillbaka till Eventura
+        </a>
       </section>
     </main>
   ))

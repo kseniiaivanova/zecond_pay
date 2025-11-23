@@ -16,7 +16,7 @@ export const events: Event[] = [
     image: '/images/frontend.jpg',
     location: 'Epicenter, Stockholm',
     price: 200,
-    description: 'Join the top frontend devs in Sweden for talks, snacks, and networking!',
+    description: 'Gå med bland Sveriges främsta frontendutvecklare för föreläsningar, snacks och nätverkande!',
   },
   {
     id: 'f3e23a88-56cd-4030-b089-7cc0b78a4292',
@@ -25,7 +25,7 @@ export const events: Event[] = [
     image: '/images/ai.jpg',
     location: 'Online',
     price: 150,
-    description: 'Explore how AI is changing frontend workflows and tooling.',
+    description: 'Utforska hur AI förändrar arbetsflöden och verktyg för frontendutveckling.',
   },
   {
     id: 'a890cf15-59b2-4a7d-b7a2-2dd56f1c3bb3',
@@ -34,7 +34,7 @@ export const events: Event[] = [
     image: '/images/ux.jpg',
     location: 'Mindpark, Malmö',
     price: 180,
-    description: 'Level up your design thinking with practical UX insights for developers.',
+    description: 'Höj din designförmåga med praktiska UX-insikter för utvecklare.',
   },
   {
     id: '7d3ebd49-d310-42f1-8fa1-13b6012cf088',
@@ -43,6 +43,6 @@ export const events: Event[] = [
     image: '/images/react.jpg',
     location: 'Lindholmen, Gothenburg',
     price: 250,
-    description: 'Deep dive into full-stack dev with React, GraphQL, and modern APIs.',
+    description: 'Fördjupa dig i fullstack-utveckling med React, GraphQL och moderna API:er.',
   },
 ]
