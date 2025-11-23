@@ -1,5 +1,5 @@
 import type { APIGatewayEvent, Context } from 'aws-lambda'
-import { db } from 'src/lib/db';
+import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 /**
@@ -29,15 +29,24 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       where: { zaverPaymentId },
     })
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ status: payment?.paymentStatus || 'UNKNOWN', orderId: payment?.orderId }),
-  }} catch (error) {
+    if (!payment) {
+      return {
+        statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'Payment not found' }),
+      }
+    }
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: payment?.paymentStatus || 'UNKNOWN', orderId: payment?.orderId }),
+    }
+  } catch (error) {
     // Handle any errors that occur during processing
-    logger.error('Error processing payment callback:', error);
+    logger.error('Error processing payment status:', error)
 
     // Respond with an error status
     return {
@@ -48,6 +57,6 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       body: JSON.stringify({
         error: 'Internal Server Error',
       }),
-    };
+    }
   }
 }
