@@ -18,7 +18,7 @@ import { logger } from 'src/lib/logger'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event, _context) => {
+export const handler = async (event: APIGatewayEvent, _context: Context) => {
   logger.info('paymentCallback triggered')
 
   try {
@@ -33,39 +33,65 @@ export const handler = async (event, _context) => {
     const zaverPaymentId = paymentData.paymentId
     const paymentStatus = paymentData.paymentStatus
 
-    logger.info('zaverPaymentId:', zaverPaymentId)
-    logger.info('paymentStatus:', paymentStatus)
+    if (!zaverPaymentId || !paymentStatus) {
+      logger.error('Missing paymentId or paymentStatus in callback', paymentData)
+      return { statusCode: 400, body: 'Invalid callback payload' }
+    }
 
+    // Update payment
+    const updatedPayment = await db.payment.update({
+      where: { zaverPaymentId },
+      data: { paymentStatus },
+    })
+    logger.info('Updated payment', updatedPayment)
+
+    // Only handle settled payments
     if (paymentStatus === 'SETTLED') {
-      logger.info('Updating payment status now')
-
-      const updatedPayment = await db.payment.update({
-        where: { zaverPaymentId },
-        data: { paymentStatus },
-      })
-
-      logger.info('Updated payment record', updatedPayment)
-
       const foundPayment = await db.payment.findUnique({
         where: { zaverPaymentId },
       })
-
-      logger.info('Found payment after update', foundPayment)
 
       if (!foundPayment) {
         logger.error('No payment found with this zaverPaymentId')
         return { statusCode: 404, body: 'Payment not found' }
       }
 
-      logger.info('Order ID from payment:', foundPayment.orderId)
-
-      const updatedOrder = await db.order.update({
+      // Update order
+      const foundOrder = await db.order.update({
         where: { id: foundPayment.orderId },
         data: { status: 'PAID', paidAt: new Date() },
       })
+      logger.info('Order updated', foundOrder)
 
-      logger.info('Order updated', updatedOrder)
-      console.log('Order updated', updatedOrder)
+      // Send email if valid
+      const email = foundOrder.email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+      if (!email || !emailRegex.test(email)) {
+        logger.error('Invalid email address, skipping sendEmail', { email })
+      } else {
+        try {
+          const emailResponse = await fetch('https://hook.eu2.make.com/9ngrpd4apaw0vigz2xqytr6isfsr7ch0', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              orderId: foundOrder.id,
+              eventName: foundOrder.eventName,
+              eventDate: foundOrder.eventDate,
+              amount: foundOrder.amount,
+            }),
+          })
+
+          if (!emailResponse.ok) {
+            logger.error('SendEmail webhook failed', await emailResponse.text())
+          } else {
+            logger.info('SendEmail webhook succeeded')
+          }
+        } catch (e) {
+          logger.error('Error sending email', e)
+        }
+      }
     }
 
     return {
