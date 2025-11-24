@@ -1,16 +1,18 @@
 export const schema = gql`
   type Order {
     id: String!
-    eventDate: String
-    eventLocation: String
     status: String!
     amount: Float!
-    paymentId: String
-    payment: Payment
     orderedAt: DateTime!
     paidAt: DateTime
     eventId: String!
     eventName: String!
+    eventDate: String!
+    eventLocation: String!
+    customerName: String!
+    email: String!
+    quantity: Int!
+    payment: Payment
   }
 
   type Query {
@@ -21,23 +23,26 @@ export const schema = gql`
   input CreateOrderInput {
     status: String!
     amount: Float!
-    paymentId: String
-    orderedAt: DateTime!
-    paidAt: DateTime
     eventId: String!
     eventName: String!
-    eventDate: String
-    eventLocation: String
+    eventDate: String!
+    eventLocation: String!
+    customerName: String!
+    email: String!
+    quantity: Int!
   }
 
   input UpdateOrderInput {
     status: String
     amount: Float
-    paymentId: String
-    orderedAt: DateTime
     paidAt: DateTime
     eventId: String
     eventName: String
+    eventDate: String
+    eventLocation: String
+    customerName: String
+    email: String
+    quantity: Int
   }
 
   type Mutation {

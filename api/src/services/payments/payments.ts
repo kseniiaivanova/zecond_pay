@@ -1,8 +1,6 @@
 import type { QueryResolvers, MutationResolvers, PaymentRelationResolvers } from 'types/graphql'
 
-
 import { db } from 'src/lib/db'
-
 
 export const payments: QueryResolvers['payments'] = () => {
   return db.payment.findMany()
@@ -20,10 +18,9 @@ export const createPayment: MutationResolvers['createPayment'] = async ({ input 
   })
 
   const updatedOrder = await db.order.update({
-    data: { paymentId: payment.id },
-    where: { id: payment.orderId },
-  });
-
+    where: { id: input.orderId },
+    data: { payment: { connect: { id: payment.id } } },
+  })
 
   return payment
 }

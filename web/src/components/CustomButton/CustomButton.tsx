@@ -2,7 +2,7 @@
 import React from 'react'
 import { Button } from '@chakra-ui/react'
 
-const CustomButton = ({ buttonText, onClick, id }) => {
+const CustomButton = ({ buttonText, onClick, id, disabled }) => {
   return (
     <Button
       colorScheme="purple"
@@ -14,6 +14,7 @@ const CustomButton = ({ buttonText, onClick, id }) => {
       textTransform="uppercase"
       fontWeight="bold"
       letterSpacing="widest"
+      isDisabled={disabled}
     >
       {buttonText}
     </Button>

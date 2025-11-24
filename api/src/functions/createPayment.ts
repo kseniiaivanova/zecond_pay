@@ -15,13 +15,14 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
 
   try {
     const requestBody = JSON.parse(event.body || '{}')
-    const { amount, eventName } = requestBody
+    const { amount, eventName, quantity } = requestBody
     if (amount === undefined) {
       // If amount is not provided, return a bad request response
       return { statusCode: 400, body: JSON.stringify({ error: 'Amount is required' }) }
     }
-
+    const unitPrice = amount / quantity
     const createPayment = await axios.post(
+      // send payment data to Zaver
       CHECKOUT_URL,
       {
         title: 'Test request',
@@ -32,8 +33,8 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
           {
             name: eventName,
             totalAmount: amount,
-            unitPrice: amount,
-            quantity: 1,
+            unitPrice: unitPrice,
+            quantity: quantity,
             taxRatePercent: 6.0,
           },
         ],

@@ -1,7 +1,6 @@
-import type { APIGatewayEvent, Context } from 'aws-lambda';
-import { db } from 'src/lib/db';
-import { logger } from 'src/lib/logger';
-
+import type { APIGatewayEvent, Context } from 'aws-lambda'
+import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
 
 /**
  * The handler function is your code that processes http request events.
@@ -19,60 +18,67 @@ import { logger } from 'src/lib/logger';
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event: APIGatewayEvent, _context: Context) => {
-  logger.info(`${event.httpMethod} ${event.path}: paymentCallback function`);
+export const handler = async (event, _context) => {
+  logger.info('paymentCallback triggered')
 
   try {
-    const paymentData = JSON.parse(event.body);
+    if (!event.body) {
+      logger.error('Callback has no body')
+      return { statusCode: 400, body: 'Missing body' }
+    }
 
+    const paymentData = JSON.parse(event.body)
+    logger.info('Incoming callback data', paymentData)
 
-    // Extract relevant information from paymentData
-    const zaverPaymentId = paymentData.paymentId;
-    const paymentStatus = paymentData.paymentStatus;
+    const zaverPaymentId = paymentData.paymentId
+    const paymentStatus = paymentData.paymentStatus
 
+    logger.info('zaverPaymentId:', zaverPaymentId)
+    logger.info('paymentStatus:', paymentStatus)
 
-    // Update payment status
     if (paymentStatus === 'SETTLED') {
-      await db.payment.update({
-        where: { zaverPaymentId: zaverPaymentId },
-        data: { paymentStatus: paymentStatus },
-      });
+      logger.info('Updating payment status now')
+
+      const updatedPayment = await db.payment.update({
+        where: { zaverPaymentId },
+        data: { paymentStatus },
+      })
+
+      logger.info('Updated payment record', updatedPayment)
 
       const foundPayment = await db.payment.findUnique({
         where: { zaverPaymentId },
-      });
-
-        await db.order.update({
-        where: { paymentId: foundPayment.id },
-        data: {status: 'PAID', paidAt: new Date()}
       })
-      console.log('Payment status updated');
 
+      logger.info('Found payment after update', foundPayment)
+
+      if (!foundPayment) {
+        logger.error('No payment found with this zaverPaymentId')
+        return { statusCode: 404, body: 'Payment not found' }
+      }
+
+      logger.info('Order ID from payment:', foundPayment.orderId)
+
+      const updatedOrder = await db.order.update({
+        where: { id: foundPayment.orderId },
+        data: { status: 'PAID', paidAt: new Date() },
+      })
+
+      logger.info('Order updated', updatedOrder)
+      console.log('Order updated', updatedOrder)
     }
 
-    // Respond with a success status
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: 'Payment callback processed successfully',
-      }),
-    };
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Payment callback processed' }),
+    }
   } catch (error) {
-    // Handle any errors that occur during processing
-    logger.error('Error processing payment callback:', error);
-
-    // Respond with an error status
+    logger.error('Callback error', error)
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        error: 'Internal Server Error',
-      }),
-    };
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Internal Server Error' }),
+    }
   }
-};
+}

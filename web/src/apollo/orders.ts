@@ -6,13 +6,15 @@ export const GET_ORDER = gql`
       id
       status
       amount
-      paymentId
       orderedAt
       paidAt
       eventId
       eventName
       eventDate
       eventLocation
+      customerName
+      email
+      quantity
     }
   }
 `
@@ -22,13 +24,15 @@ export const CREATE_ORDER = gql`
       id
       status
       amount
-      paymentId
       orderedAt
       paidAt
       eventId
       eventName
       eventDate
       eventLocation
+      customerName
+      email
+      quantity
     }
   }
 `

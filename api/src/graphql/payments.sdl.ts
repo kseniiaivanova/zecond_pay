@@ -3,8 +3,8 @@ export const schema = gql`
     id: String!
     orderId: String!
     updatedAt: DateTime!
-    order: Order
-    zaverPaymentId: String
+    order: Order!
+    zaverPaymentId: String!
     paymentStatus: String!
   }
 
@@ -17,11 +17,10 @@ export const schema = gql`
     orderId: String!
     zaverPaymentId: String!
     paymentStatus: String!
-
   }
 
   input UpdatePaymentInput {
-   paymentStatus:String!
+    paymentStatus: String!
   }
 
   type Mutation {
