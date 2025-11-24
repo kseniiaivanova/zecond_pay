@@ -1,16 +1,17 @@
 export const ORDER = `
 id
-eventDate
-eventLocation
 status
 amount
-paymentId
 orderedAt
 paidAt
 eventId
 eventName
+eventDate
+eventLocation
+customerName
+email
+quantity
 `
-
 
 export const PAYMENT = `
 id

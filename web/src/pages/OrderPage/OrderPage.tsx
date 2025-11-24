@@ -1,52 +1,132 @@
 import { useEffect, useState } from 'react'
-
-import { useMutation, useQuery } from '@apollo/client'
-import { Flex, Text, Heading, chakra, VStack, Box } from '@chakra-ui/react'
+import { useMutation } from '@apollo/client'
+import { Flex, Text, Heading, VStack, Box, Divider, Badge, HStack } from '@chakra-ui/react'
 
 import { navigate, routes, useParams } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
-import { GET_ORDER } from 'src/apollo/orders'
+import { CREATE_ORDER } from 'src/apollo/orders'
 import { CREATE_PAYMENT } from 'src/apollo/payments'
 import CustomButton from 'src/components/CustomButton/CustomButton'
-import PageLoading from 'src/components/PageLoading/PageLoading'
 import { useToast } from 'src/components/Toaster'
+import { events } from 'src/data/events'
+import ConfirmationStep from 'src/components/ConfirmationStep/ConfirmationStep'
 
 const OrderPage = () => {
-  const { orderId } = useParams()
+  const { eventId } = useParams()
   const { errorToast } = useToast()
-  const [isPaymentCreated, setIsPaymentCreated] = useState(false)
+
+  const [createdOrderId, setCreatedOrderId] = useState(null)
+  const [isOrderCreated, setIsOrderCreated] = useState(false)
   const [paymentData, setPaymentData] = useState(null)
 
-  const { data, loading: orderLoading } = useQuery(GET_ORDER, {
-    variables: { id: orderId },
-    onError: () => {
-      errorToast('Failed to fetch order details.')
-    },
+  const [formData, setFormData] = useState({
+    quantity: 1,
+    name: '',
+    email: '',
   })
 
-  const order = data?.order
+  const event = events.find((e) => e.id === eventId)
+
+  if (!event) {
+    errorToast('Event not found')
+    navigate(routes.welcome())
+    return null
+  }
+
+  const totalAmount = event.price * formData.quantity
+
+  const [createOrder] = useMutation(CREATE_ORDER, {
+    onError: () => errorToast('Failed to create order'),
+    onCompleted: (data) => {
+      setCreatedOrderId(data.createOrder.id)
+      setIsOrderCreated(true)
+      console.log(data.createOrder.id)
+    },
+  })
 
   const [createPayment] = useMutation(CREATE_PAYMENT, {
-    onError: () => {
-      errorToast('Failed to create payment')
-    },
-    onCompleted: (data) => {
-      setIsPaymentCreated(true)
-    },
+    onError: () => errorToast('Failed to create payment'),
   })
 
-  // Load Zaver script only when we have the token
+  const handleFormChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleConfirmOrder = async () => {
+    try {
+      await createOrder({
+        variables: {
+          input: {
+            status: 'CREATED',
+            amount: totalAmount,
+            eventId: event.id,
+            eventName: event.title,
+            eventLocation: event.location,
+            eventDate: event.date,
+            customerName: formData.name,
+            email: formData.email,
+            quantity: formData.quantity,
+          },
+        },
+      })
+    } catch (error) {
+      console.error('Failed to create order:', error)
+    }
+  }
+
+  const handlePayment = async () => {
+    if (!createdOrderId) {
+      errorToast('Order not found. Confirm order first.')
+      return
+    }
+
+    try {
+      const response = await fetch('/.netlify/functions/createPayment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: totalAmount,
+          eventName: event.title,
+          quantity: formData.quantity,
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+
+        setPaymentData({
+          token: data.token,
+          paymentId: data.paymentId,
+          status: data.paymentStatus,
+        })
+
+        const paymentInput = {
+          input: {
+            orderId: createdOrderId,
+            zaverPaymentId: data.paymentId,
+            paymentStatus: data.paymentStatus,
+          },
+        }
+
+        createPayment({ variables: paymentInput })
+      }
+    } catch (error) {
+      console.error('Payment error:', error)
+      errorToast('Failed to create payment')
+    }
+  }
+
+  const handleGoBack = () => {
+    navigate(routes.welcome())
+  }
+
   useEffect(() => {
     if (!paymentData?.token) return
 
-    // Check if script already exists
-    const existingScript = document.getElementById('zco-loader')
-    if (existingScript) {
-      // Script exists, just update the token
-      existingScript.setAttribute('zco-token', paymentData.token)
-      // Manually trigger Zaver's load function if available
-
+    const existing = document.getElementById('zco-loader')
+    if (existing) {
+      existing.setAttribute('zco-token', paymentData.token)
       return
     }
 
@@ -55,8 +135,6 @@ const OrderPage = () => {
     script.id = 'zco-loader'
     document.body.appendChild(script)
 
-    // Wait for script to load, THEN set the token
-    // This triggers Zaver's MutationObserver
     script.onload = () => {
       setTimeout(() => {
         script.setAttribute('zco-token', paymentData.token)
@@ -64,129 +142,122 @@ const OrderPage = () => {
     }
   }, [paymentData?.token])
 
-  const handleButtonClick = async () => {
-    try {
-      const response = await fetch('/.netlify/functions/createPayment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: 'Test request',
-          amount: order.amount,
-          eventName: order.eventName,
-        }),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-
-        // Set payment data
-        setPaymentData({
-          token: data.token,
-          paymentId: data.paymentId,
-          status: data.paymentStatus,
-        })
-
-        // Create the payment input object
-        const paymentInput = {
-          input: {
-            orderId: orderId,
-            zaverPaymentId: data.paymentId,
-            paymentStatus: data.paymentStatus,
-          },
-        }
-
-        // Call the GraphQL mutation with the payment input
-        createPayment({ variables: paymentInput })
-      }
-    } catch (error) {
-      console.error('An error occurred during fetch:', error)
-    }
-  }
-
-  // Payment status check effect
-  useEffect(() => {
-    if (!paymentData?.paymentId) return
+  /*  useEffect(() => {
+    if (!paymentData?.paymentId || !createdOrderId) return
 
     const interval = setInterval(async () => {
       const response = await fetch('/.netlify/functions/checkPaymentStatus', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: paymentData.paymentId }),
       })
 
       const result = await response.json()
+
       if (result.status === 'SETTLED') {
         clearInterval(interval)
-        navigate(routes.thankYou({ orderId }))
+        navigate(routes.thankYou({ orderId: createdOrderId }))
       }
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [paymentData?.paymentId, orderId])
-
-  const handleGoBack = () => {
-    navigate(routes.welcome())
-  }
+  }, [paymentData?.paymentId, createdOrderId]) */
 
   return (
     <>
       <MetaTags title="Order" description="Order summary" />
-      <Flex direction="column" minH="100vh" align="center" justify="flex-start" px={4} py={10}>
-        {orderLoading && <PageLoading />}
-        {!orderLoading && (
-          <>
-            <Heading as="h1" size="lg" mb={6} textAlign="center" color="gray.800">
-              Sammanfattning av order
+      <Flex
+        direction="column"
+        minH="100vh"
+        align="center"
+        px={4}
+        py={10}
+        bgGradient="linear(to-br, blue.50, purple.50)"
+      >
+        <Heading as="h1" size="xl" mb={8} textAlign="center">
+          Orderbekräftelse
+        </Heading>
+
+        <Flex
+          bg="white"
+          direction="column"
+          p={8}
+          borderRadius="2xl"
+          boxShadow="2xl"
+          w="full"
+          maxW="2xl"
+          border="1px"
+          borderColor="gray.200"
+        >
+          <Box bgGradient="linear(to-r, blue.500, purple.600)" p={6} borderRadius="xl" mb={6} color="white">
+            <Heading as="h2" size="lg" mb={4}>
+              {event.title}
             </Heading>
 
-            <Flex
-              bg="white"
-              direction="column"
-              p={8}
-              borderRadius="lg"
-              boxShadow="xl"
-              w="full"
-              maxW="lg"
-              align="center"
-              justify="center"
-            >
-              <VStack spacing={6} align="stretch" mt={4}>
-                <Text fontSize="md" color="gray.600">
-                  <chakra.b>Order ID:</chakra.b> {orderId}
-                </Text>
-                <Text fontSize="md" color="gray.600">
-                  <chakra.b>Event:</chakra.b> {order.eventName}
-                </Text>
-                <Text fontSize="md" color="gray.600">
-                  <chakra.b>Location:</chakra.b> {order.eventLocation}
-                </Text>
-                <Text fontSize="md" color="gray.600">
-                  <chakra.b>Date:</chakra.b> {order.eventDate}
-                </Text>
-                <Text fontSize="md" color="gray.600">
-                  <chakra.b>Status:</chakra.b> {order.status}
-                </Text>
-                {order.status === 'CREATED' && !isPaymentCreated && (
-                  <Text fontSize="md" color="gray.600">
-                    <chakra.b>Amount to Pay:</chakra.b> {order.amount} SEK
-                  </Text>
-                )}
-              </VStack>
-              <Box id="zco-container" mt={6}></Box>
+            <VStack align="stretch" spacing={3}>
+              <HStack spacing={3}>
+                <Text fontWeight="bold">Location</Text>
+                <Text>{event.location}</Text>
+              </HStack>
+
+              <HStack spacing={3}>
+                <Text fontWeight="bold">Date</Text>
+                <Text>{event.date}</Text>
+              </HStack>
+            </VStack>
+          </Box>
+
+          <Divider mb={6} />
+
+          <VStack spacing={4} align="stretch" mb={6}>
+            <Flex justify="space-between" align="center">
+              <Text>Pris per biljett</Text>
+              <Text fontWeight="semibold">{event.price} SEK</Text>
             </Flex>
 
-            <VStack spacing={6} mt={10} align="center">
-              {order.status === 'CREATED' && !isPaymentCreated && (
-                <CustomButton id="create-payment-button" buttonText="Pay" onClick={handleButtonClick} />
-              )}
-              <CustomButton id="navigation-button" buttonText="Go back" onClick={handleGoBack} />
-            </VStack>
-          </>
-        )}
+            <Flex justify="space-between" align="center">
+              <Text>Antal biljetter</Text>
+              <Badge colorScheme="purple" px={3} py={1}>
+                {formData.quantity}
+              </Badge>
+            </Flex>
+
+            <Divider />
+
+            <Flex justify="space-between" align="center" py={2}>
+              <Text fontWeight="bold">Totalt att betala</Text>
+              <Text fontSize="2xl" fontWeight="bold" color="purple.600">
+                {totalAmount} SEK
+              </Text>
+            </Flex>
+          </VStack>
+
+          <Divider mb={8} />
+
+          {!isOrderCreated ? (
+            <ConfirmationStep formData={formData} onChange={handleFormChange} onConfirm={handleConfirmOrder} />
+          ) : (
+            <Box bg="green.50" p={6} borderRadius="xl" border="2px" borderColor="green.200" textAlign="center">
+              <Text fontSize="xl" fontWeight="bold" mb={2}>
+                Order bekräftad
+              </Text>
+              <Text fontSize="sm" mb={4}>
+                Order ID: {createdOrderId}
+              </Text>
+              <Text fontSize="sm">Fortsätt till betalning för att slutföra ditt köp</Text>
+            </Box>
+          )}
+
+          <Box id="zco-container" mt={6} />
+        </Flex>
+
+        <VStack spacing={4} mt={8} w="full" maxW="md">
+          {isOrderCreated && !paymentData && (
+            <CustomButton id="create-payment-button" buttonText="Betala nu" onClick={handlePayment} disabled={false} />
+          )}
+
+          <CustomButton id="navigation-button" buttonText="Tillbaka" onClick={handleGoBack} disabled={false} />
+        </VStack>
       </Flex>
     </>
   )

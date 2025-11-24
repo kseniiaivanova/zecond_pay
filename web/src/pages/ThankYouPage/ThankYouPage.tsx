@@ -8,7 +8,7 @@ import { MetaTags } from '@redwoodjs/web'
 
 import { GET_ORDER } from 'src/apollo/orders'
 import CustomButton from 'src/components/CustomButton/CustomButton'
-import GetContactForm from 'src/components/GetContactForm/GetContactForm'
+import GetContactForm from 'src/components/ConfirmationStep/ConfirmationStep'
 import PageLoading from 'src/components/PageLoading/PageLoading'
 import { useToast } from 'src/components/Toaster'
 

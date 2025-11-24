@@ -16,25 +16,28 @@ model Order {
   id            String    @id @default(cuid()) @map("_id")
   status        String
   amount        Float
-  paymentId     String?   @unique
-  payment       Payment?  @relation(fields: [paymentId], references: [id])
-  orderedAt     DateTime  @default(now()) @map("ordered_at")
-  paidAt        DateTime? @map("paid_at")
+  orderedAt     DateTime  @default(now())
+  paidAt        DateTime?
   eventId       String
   eventName     String
   eventDate     String
   eventLocation String
+  customerName  String
+  email         String
+  quantity      Int
+  payment       Payment?
 
   @@map("orders")
 }
 
 model Payment {
   id             String   @id @default(cuid()) @map("_id")
-  orderId        String
-  updatedAt      DateTime @updatedAt @map("updated_at")
-  paymentStatus  String
+  orderId        String   @unique
+  order          Order    @relation(fields: [orderId], references: [id])
   zaverPaymentId String   @unique
-  Order          Order?
+  paymentStatus  String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("payments")
 }

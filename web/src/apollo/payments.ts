@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 
-export const GET_PAYMENT= gql`
+export const GET_PAYMENT = gql`
   query GetPayment($id: String!) {
     payment: payment(id: $id) {
       id
       orderId
       updatedAt
+    }
   }
-}
 `
 
 export const CREATE_PAYMENT = gql`
@@ -18,11 +18,9 @@ export const CREATE_PAYMENT = gql`
       updatedAt
       zaverPaymentId
       paymentStatus
-
-
     }
   }
-`;
+`
 
 export const UPDATE_PAYMENT = gql`
   mutation UpdatePayment($id: String!, $input: UpdatePaymentInput!) {
@@ -34,4 +32,4 @@ export const UPDATE_PAYMENT = gql`
       paymentStatus
     }
   }
-`;
+`
