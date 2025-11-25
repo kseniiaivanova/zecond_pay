@@ -8,12 +8,13 @@ import { GET_ORDER } from 'src/apollo/orders'
 import CustomButton from 'src/components/CustomButton/CustomButton'
 import PageLoading from 'src/components/PageLoading/PageLoading'
 import { useToast } from 'src/components/Toaster'
+import { Order } from 'src/types/order'
 
 const ThankYouPage = () => {
   const { orderId } = useParams()
   const { errorToast } = useToast()
 
-  const { data, loading } = useQuery(GET_ORDER, {
+  const { data, loading } = useQuery<{ order: Order }>(GET_ORDER, {
     variables: { id: orderId },
     onError: () => {
       errorToast('Kunde inte hämta orderinformation.')
@@ -50,7 +51,7 @@ const ThankYouPage = () => {
             <Text fontSize="md" color="gray.700" mb={4}>
               Din biljett har skickats till {order?.email}.
             </Text>
-            <CustomButton id="navigation-button" buttonText="Till startsidan" onClick={handleGoBack} disabled={false} />
+            <CustomButton id="navigation-button" buttonText="Till startsidan" onClick={handleGoBack} />
           </Box>
         )}
       </Flex>

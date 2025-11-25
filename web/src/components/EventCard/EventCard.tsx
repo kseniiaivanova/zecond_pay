@@ -1,10 +1,14 @@
 import { Box, Heading, Image, ListItem, UnorderedList, Text, Stack, HStack, Flex } from '@chakra-ui/react'
-import { events } from 'src/data/events'
+import { events, EventType } from 'src/data/events'
 import CustomButton from 'src/components/CustomButton'
 
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa'
 
-const Event = ({ handleCheckout }) => {
+interface EventProps {
+  handleCheckout: (event: EventType) => void
+}
+
+const Event = ({ handleCheckout }: EventProps) => {
   return (
     <Box>
       <Heading as="h1" size="xl" mt={[12, 8, 8]} textAlign="center">
@@ -32,12 +36,7 @@ const Event = ({ handleCheckout }) => {
                   <Text>{event.description}</Text>
                   <Text fontWeight="bold">Price: {event.price} SEK</Text>
                   <Box alignSelf="start">
-                    <CustomButton
-                      id="payment_button"
-                      buttonText="Köp biljett"
-                      disabled={false}
-                      onClick={() => handleCheckout(event)}
-                    />
+                    <CustomButton id="payment_button" buttonText="Köp biljett" onClick={() => handleCheckout(event)} />
                   </Box>
                 </Stack>
               </Flex>
