@@ -1,8 +1,14 @@
-// CustomButton.js
 import React from 'react'
 import { Button } from '@chakra-ui/react'
 
-const CustomButton = ({ buttonText, onClick, id, disabled }) => {
+interface CustomButtonProps {
+  buttonText: string
+  onClick: () => void
+  disabled?: boolean
+  id?: string
+}
+
+const CustomButton = ({ buttonText, onClick, id, disabled }: CustomButtonProps) => {
   return (
     <Button
       colorScheme="purple"

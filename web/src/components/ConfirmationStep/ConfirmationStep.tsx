@@ -2,7 +2,6 @@ import React, { ChangeEvent } from 'react'
 import {
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
   Input,
   NumberDecrementStepper,
@@ -15,16 +14,11 @@ import {
   chakra,
 } from '@chakra-ui/react'
 import CustomButton from '../CustomButton'
-
-interface FormData {
-  name: string
-  email: string
-  quantity: number
-}
+import { CustomerFormData } from 'src/types/customerFormData'
 
 type Props = {
-  formData: FormData
-  onChange: (field: keyof FormData, value: string | number) => void
+  formData: CustomerFormData
+  onChange: (field: keyof CustomerFormData, value: string | number) => void
   onConfirm: () => void
 }
 
@@ -33,7 +27,7 @@ const ConfirmationStep = ({ formData, onChange, onConfirm }: Props) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    onChange(name as keyof FormData, value)
+    onChange(name as keyof CustomerFormData, value)
   }
 
   const handleQuantityChange = (valueAsString: string, valueAsNumber: number) => {
@@ -44,7 +38,7 @@ const ConfirmationStep = ({ formData, onChange, onConfirm }: Props) => {
     <Flex direction="column" mt={6} gap={4}>
       <FormControl>
         <FormLabel>Kvantitet</FormLabel>
-        <NumberInput value={formData.quantity} min={1} onChange={handleQuantityChange}>
+        <NumberInput name="quantity" value={formData.quantity} min={1} onChange={handleQuantityChange}>
           <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />
@@ -66,7 +60,6 @@ const ConfirmationStep = ({ formData, onChange, onConfirm }: Props) => {
         <FormLabel>Email</FormLabel>
         <Input id="get-email-input" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
         <Stack my={4}>
-          {' '}
           <Text fontSize="sm" color="gray.500" mt={1}>
             Biljett skickas till denna email.
           </Text>
@@ -74,7 +67,7 @@ const ConfirmationStep = ({ formData, onChange, onConfirm }: Props) => {
       </FormControl>
 
       <CustomButton
-        id="confirmation-button"
+        id="confirm-order-button"
         buttonText="Confirm Order"
         onClick={onConfirm}
         disabled={!formData.name || !isEmailValid || formData.quantity < 1}

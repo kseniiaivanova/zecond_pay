@@ -13,7 +13,6 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalBody,
   ModalFooter,
   Button,
 } from '@chakra-ui/react'
@@ -27,19 +26,21 @@ import CustomButton from 'src/components/CustomButton/CustomButton'
 import { useToast } from 'src/components/Toaster'
 import { events } from 'src/data/events'
 import ConfirmationStep from 'src/components/ConfirmationStep/ConfirmationStep'
+import { CustomerFormData } from 'src/types/customerFormData'
+import { PaymentData } from 'src/types/paymentData'
 
 const OrderPage = () => {
   const { eventId } = useParams()
   const { errorToast } = useToast()
 
-  const [createdOrderId, setCreatedOrderId] = useState(null)
+  const [createdOrderId, setCreatedOrderId] = useState<string>('')
   const [isOrderCreated, setIsOrderCreated] = useState(false)
-  const [paymentData, setPaymentData] = useState(null)
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(null)
   const [isPaymentSettled, setIsPaymentSettled] = useState(false)
   const [showBackModal, setShowBackModal] = useState(false)
   const [ongoingPayment, setOngoingPayment] = useState(false)
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CustomerFormData>({
     quantity: 1,
     name: '',
     email: '',
@@ -67,7 +68,7 @@ const OrderPage = () => {
     onError: () => errorToast('Failed to create payment'),
   })
 
-  const handleFormChange = (field, value) => {
+  const handleFormChange = (field: keyof CustomerFormData, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -89,7 +90,7 @@ const OrderPage = () => {
         },
       })
     } catch (error) {
-      console.error('Failed to create order:', error)
+      errorToast('Could not create order. Please try again.')
     }
   }
 
@@ -300,20 +301,10 @@ const OrderPage = () => {
             />
           )}
           {paymentData?.token && !isPaymentSettled && (
-            <CustomButton
-              id="cancel-payment-button"
-              buttonText="Avbryt betalning"
-              onClick={handleCancelPayment}
-              disabled={false}
-            />
+            <CustomButton id="cancel-payment-button" buttonText="Avbryt betalning" onClick={handleCancelPayment} />
           )}
-
-          <CustomButton
-            id="navigation-button"
-            buttonText="Tillbaka"
-            onClick={handleGoBack}
-            disabled={paymentData?.token && isPaymentSettled}
-          />
+          id="navigation-button"
+          {ongoingPayment && <CustomButton buttonText="Tillbaka" onClick={handleGoBack} />}
         </VStack>
       </Flex>
       <Modal isOpen={showBackModal} onClose={() => setShowBackModal(false)}>
