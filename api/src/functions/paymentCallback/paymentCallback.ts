@@ -80,6 +80,7 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
               eventName: foundOrder.eventName,
               eventDate: foundOrder.eventDate,
               amount: foundOrder.amount,
+              quantity: foundOrder.quantity || 1,
             }),
           })
 
