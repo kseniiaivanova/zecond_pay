@@ -33,10 +33,8 @@ const OrderPage = () => {
   const { eventId } = useParams()
   const { errorToast } = useToast()
 
-  const [createdOrderId, setCreatedOrderId] = useState<string>('')
-  const [isOrderCreated, setIsOrderCreated] = useState(false)
+  const [createdOrderId, setCreatedOrderId] = useState<string>(null)
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null)
-  const [isPaymentSettled, setIsPaymentSettled] = useState(false)
   const [showBackModal, setShowBackModal] = useState(false)
   const [ongoingPayment, setOngoingPayment] = useState(false)
 
@@ -60,7 +58,6 @@ const OrderPage = () => {
     onError: () => errorToast('Failed to create order'),
     onCompleted: (data) => {
       setCreatedOrderId(data.createOrder.id)
-      setIsOrderCreated(true)
     },
   })
 
@@ -141,6 +138,8 @@ const OrderPage = () => {
     }
   }
 
+  const isPaymentSettled = paymentData?.status === 'SETTLED'
+
   const handleGoBack = () => {
     navigate(routes.welcome())
   }
@@ -184,7 +183,6 @@ const OrderPage = () => {
 
       if (result.status === 'SETTLED') {
         clearInterval(interval)
-        setIsPaymentSettled(true)
         navigate(routes.thankYou({ orderId: createdOrderId }))
       }
     }, 1500)
@@ -259,11 +257,11 @@ const OrderPage = () => {
             </Flex>
           </VStack>
           <Divider mb={8} />
-          {!isOrderCreated && (
+          {!createdOrderId && (
             <ConfirmationStep formData={formData} onChange={handleFormChange} onConfirm={handleConfirmOrder} />
           )}
 
-          {isOrderCreated && !isPaymentSettled && (
+          {createdOrderId && !isPaymentSettled && (
             <Box bg="green.50" p={6} borderRadius="xl" border="2px" borderColor="green.200" textAlign="center">
               {!paymentData ? (
                 <>
@@ -292,7 +290,7 @@ const OrderPage = () => {
           <Box id="zco-container" mt={6} />
         </Flex>
         <VStack spacing={4} mt={8} w="full" maxW="md">
-          {isOrderCreated && !paymentData && (
+          {createdOrderId && !paymentData && (
             <CustomButton
               id="create-payment-button"
               buttonText="Betala nu"
@@ -303,8 +301,8 @@ const OrderPage = () => {
           {paymentData?.token && !isPaymentSettled && (
             <CustomButton id="cancel-payment-button" buttonText="Avbryt betalning" onClick={handleCancelPayment} />
           )}
-          id="navigation-button"
-          {ongoingPayment && <CustomButton buttonText="Tillbaka" onClick={handleGoBack} />}
+
+          {!ongoingPayment && <CustomButton id="navigation-button" buttonText="Tillbaka" onClick={handleGoBack} />}
         </VStack>
       </Flex>
       <Modal isOpen={showBackModal} onClose={() => setShowBackModal(false)}>
