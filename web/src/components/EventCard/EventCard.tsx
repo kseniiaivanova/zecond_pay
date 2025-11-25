@@ -16,7 +16,7 @@ const Event = ({ handleCheckout }) => {
             <ListItem key={event.id} bg="gray.50" p={6} borderRadius="xl" boxShadow="md">
               <Flex gap={6} direction={['column', 'row', 'row']}>
                 <Image src={event.image} alt={event.title} borderRadius="lg" maxW="400px" w="full" />
-                <Stack spacing={2} ml={[0, 6, 6]}>
+                <Stack spacing={4} ml={[0, 6, 6]} flex="1">
                   <Text fontSize="xl" fontWeight="bold">
                     {event.title}
                   </Text>
@@ -31,13 +31,15 @@ const Event = ({ handleCheckout }) => {
 
                   <Text>{event.description}</Text>
                   <Text fontWeight="bold">Price: {event.price} SEK</Text>
+                  <Box alignSelf="start">
+                    <CustomButton
+                      id="payment_button"
+                      buttonText="Köp biljett"
+                      disabled={false}
+                      onClick={() => handleCheckout(event)}
+                    />
+                  </Box>
                 </Stack>
-                <CustomButton
-                  id="payment_button"
-                  buttonText="Köp biljett"
-                  disabled={false}
-                  onClick={() => handleCheckout(event)}
-                />
               </Flex>
             </ListItem>
           ))}

@@ -2,6 +2,7 @@ import React, { ChangeEvent } from 'react'
 import {
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   NumberDecrementStepper,
@@ -9,6 +10,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Stack,
   Text,
   chakra,
 } from '@chakra-ui/react'
@@ -39,35 +41,41 @@ const ConfirmationStep = ({ formData, onChange, onConfirm }: Props) => {
   }
 
   return (
-    <Flex direction="column" mt={6}>
-      <NumberInput value={formData.quantity} min={1} onChange={handleQuantityChange}>
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
-      <Text fontSize="md" color="gray.600">
+    <Flex direction="column" mt={6} gap={4}>
+      <FormControl>
+        <FormLabel>Kvantitet</FormLabel>
+        <NumberInput value={formData.quantity} min={1} onChange={handleQuantityChange}>
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </FormControl>
+
+      <Text fontSize="md" color="gray.600" mt={4}>
         <chakra.b>Köparens uppgifter</chakra.b>
       </Text>
-      <FormControl mt={4}>
-        <FormLabel color="gray.600" fontSize="sm">
-          Name
-        </FormLabel>
-        <Input id="get-name-input" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
+
+      <FormControl>
+        <FormLabel>Name</FormLabel>
+        <Input id="get-name-input" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
       </FormControl>
-      <FormControl mt={4}>
-        <FormLabel color="gray.600" fontSize="sm">
-          Email
-        </FormLabel>
-        <Input id="get-email-input" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-        <FormLabel mt={2} color="gray.600" fontSize="sm">
-          Biljett och kvitto skickas till denna email.
-        </FormLabel>
+
+      <FormControl>
+        <FormLabel>Email</FormLabel>
+        <Input id="get-email-input" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
+        <Stack my={4}>
+          {' '}
+          <Text fontSize="sm" color="gray.500" mt={1}>
+            Biljett skickas till denna email.
+          </Text>
+        </Stack>
       </FormControl>
+
       <CustomButton
-        buttonText="Confirm Order"
         id="confirmation-button"
+        buttonText="Confirm Order"
         onClick={onConfirm}
         disabled={!formData.name || !isEmailValid || formData.quantity < 1}
       />

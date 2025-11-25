@@ -1,6 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { Flex, Text, Heading, VStack, Box, Divider, Badge, HStack } from '@chakra-ui/react'
+import {
+  Flex,
+  Text,
+  Heading,
+  VStack,
+  Box,
+  Divider,
+  Badge,
+  HStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from '@chakra-ui/react'
 
 import { navigate, routes, useParams } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
@@ -19,6 +35,9 @@ const OrderPage = () => {
   const [createdOrderId, setCreatedOrderId] = useState(null)
   const [isOrderCreated, setIsOrderCreated] = useState(false)
   const [paymentData, setPaymentData] = useState(null)
+  const [isPaymentSettled, setIsPaymentSettled] = useState(false)
+  const [showBackModal, setShowBackModal] = useState(false)
+  const [ongoingPayment, setOngoingPayment] = useState(false)
 
   const [formData, setFormData] = useState({
     quantity: 1,
@@ -41,7 +60,6 @@ const OrderPage = () => {
     onCompleted: (data) => {
       setCreatedOrderId(data.createOrder.id)
       setIsOrderCreated(true)
-      console.log(data.createOrder.id)
     },
   })
 
@@ -76,6 +94,9 @@ const OrderPage = () => {
   }
 
   const handlePayment = async () => {
+    if (ongoingPayment) return
+    setOngoingPayment(true)
+
     if (!createdOrderId) {
       errorToast('Order not found. Confirm order first.')
       return
@@ -114,6 +135,8 @@ const OrderPage = () => {
     } catch (error) {
       console.error('Payment error:', error)
       errorToast('Failed to create payment')
+    } finally {
+      setOngoingPayment(false)
     }
   }
 
@@ -121,12 +144,16 @@ const OrderPage = () => {
     navigate(routes.welcome())
   }
 
+  const handleCancelPayment = () => {
+    setShowBackModal(true)
+  }
+
   useEffect(() => {
     if (!paymentData?.token) return
 
-    const existing = document.getElementById('zco-loader')
-    if (existing) {
-      existing.setAttribute('zco-token', paymentData.token)
+    const existingScript = document.getElementById('zco-loader')
+    if (existingScript) {
+      existingScript.setAttribute('zco-token', paymentData.token)
       return
     }
 
@@ -142,7 +169,7 @@ const OrderPage = () => {
     }
   }, [paymentData?.token])
 
-  /*  useEffect(() => {
+  useEffect(() => {
     if (!paymentData?.paymentId || !createdOrderId) return
 
     const interval = setInterval(async () => {
@@ -156,12 +183,18 @@ const OrderPage = () => {
 
       if (result.status === 'SETTLED') {
         clearInterval(interval)
+        setIsPaymentSettled(true)
         navigate(routes.thankYou({ orderId: createdOrderId }))
       }
-    }, 3000)
+    }, 1500)
 
     return () => clearInterval(interval)
-  }, [paymentData?.paymentId, createdOrderId]) */
+  }, [paymentData?.paymentId, createdOrderId])
+
+  const confirmGoBack = () => {
+    setShowBackModal(false)
+    navigate(routes.welcome())
+  }
 
   return (
     <>
@@ -193,37 +226,30 @@ const OrderPage = () => {
             <Heading as="h2" size="lg" mb={4}>
               {event.title}
             </Heading>
-
             <VStack align="stretch" spacing={3}>
               <HStack spacing={3}>
                 <Text fontWeight="bold">Location</Text>
                 <Text>{event.location}</Text>
               </HStack>
-
               <HStack spacing={3}>
                 <Text fontWeight="bold">Date</Text>
                 <Text>{event.date}</Text>
               </HStack>
             </VStack>
           </Box>
-
           <Divider mb={6} />
-
           <VStack spacing={4} align="stretch" mb={6}>
             <Flex justify="space-between" align="center">
               <Text>Pris per biljett</Text>
               <Text fontWeight="semibold">{event.price} SEK</Text>
             </Flex>
-
             <Flex justify="space-between" align="center">
               <Text>Antal biljetter</Text>
               <Badge colorScheme="purple" px={3} py={1}>
                 {formData.quantity}
               </Badge>
             </Flex>
-
             <Divider />
-
             <Flex justify="space-between" align="center" py={2}>
               <Text fontWeight="bold">Totalt att betala</Text>
               <Text fontSize="2xl" fontWeight="bold" color="purple.600">
@@ -231,34 +257,79 @@ const OrderPage = () => {
               </Text>
             </Flex>
           </VStack>
-
           <Divider mb={8} />
-
-          {!isOrderCreated ? (
+          {!isOrderCreated && (
             <ConfirmationStep formData={formData} onChange={handleFormChange} onConfirm={handleConfirmOrder} />
-          ) : (
+          )}
+
+          {isOrderCreated && !isPaymentSettled && (
             <Box bg="green.50" p={6} borderRadius="xl" border="2px" borderColor="green.200" textAlign="center">
-              <Text fontSize="xl" fontWeight="bold" mb={2}>
-                Order bekräftad
-              </Text>
-              <Text fontSize="sm" mb={4}>
-                Order ID: {createdOrderId}
-              </Text>
-              <Text fontSize="sm">Fortsätt till betalning för att slutföra ditt köp</Text>
+              {!paymentData ? (
+                <>
+                  <Text fontSize="xl" fontWeight="bold" mb={2}>
+                    Order bekräftad
+                  </Text>
+                  <Text fontSize="sm" mb={4}>
+                    Order ID: {createdOrderId}
+                  </Text>
+                  <Text fontSize="sm">Fortsätt till betalning för att slutföra ditt köp</Text>
+                </>
+              ) : (
+                <>
+                  <Text fontSize="xl" fontWeight="bold" mb={2}>
+                    Betalning genomförs
+                  </Text>
+                  <Text fontSize="sm" mb={4}>
+                    Order ID: {createdOrderId}
+                  </Text>
+                  <Text fontSize="sm">Stäng inte fönstret för att slutföra betalningen</Text>
+                </>
+              )}
             </Box>
           )}
 
           <Box id="zco-container" mt={6} />
         </Flex>
-
         <VStack spacing={4} mt={8} w="full" maxW="md">
           {isOrderCreated && !paymentData && (
-            <CustomButton id="create-payment-button" buttonText="Betala nu" onClick={handlePayment} disabled={false} />
+            <CustomButton
+              id="create-payment-button"
+              buttonText="Betala nu"
+              onClick={handlePayment}
+              disabled={ongoingPayment}
+            />
+          )}
+          {paymentData?.token && !isPaymentSettled && (
+            <CustomButton
+              id="cancel-payment-button"
+              buttonText="Avbryt betalning"
+              onClick={handleCancelPayment}
+              disabled={false}
+            />
           )}
 
-          <CustomButton id="navigation-button" buttonText="Tillbaka" onClick={handleGoBack} disabled={false} />
+          <CustomButton
+            id="navigation-button"
+            buttonText="Tillbaka"
+            onClick={handleGoBack}
+            disabled={paymentData?.token && isPaymentSettled}
+          />
         </VStack>
       </Flex>
+      <Modal isOpen={showBackModal} onClose={() => setShowBackModal(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Avbryt betalning?</ModalHeader>
+          <ModalFooter>
+            <Button variant="ghost" onClick={() => setShowBackModal(false)}>
+              Nej
+            </Button>
+            <Button colorScheme="red" onClick={confirmGoBack} ml={3}>
+              Ja, gå tillbaka
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
