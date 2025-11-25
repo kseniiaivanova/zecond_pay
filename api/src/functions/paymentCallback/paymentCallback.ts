@@ -38,6 +38,19 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
       return { statusCode: 400, body: 'Invalid callback payload' }
     }
 
+    // Idempotency check
+    const existingPayment = await db.payment.findUnique({
+      where: { zaverPaymentId },
+    })
+
+    if (existingPayment?.paymentStatus === 'SETTLED') {
+      logger.info('Payment already settled, skipping processing', { zaverPaymentId })
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Payment already settled' }),
+      }
+    }
+
     // Update payment
     const updatedPayment = await db.payment.update({
       where: { zaverPaymentId },
@@ -47,18 +60,9 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
 
     // Only handle settled payments
     if (paymentStatus === 'SETTLED') {
-      const foundPayment = await db.payment.findUnique({
-        where: { zaverPaymentId },
-      })
-
-      if (!foundPayment) {
-        logger.error('No payment found with this zaverPaymentId')
-        return { statusCode: 404, body: 'Payment not found' }
-      }
-
       // Update order
       const foundOrder = await db.order.update({
-        where: { id: foundPayment.orderId },
+        where: { id: updatedPayment.orderId },
         data: { status: 'PAID', paidAt: new Date() },
       })
       logger.info('Order updated', foundOrder)
