@@ -4,8 +4,6 @@
 
 This project runs in a test environment - no real payments are processed. After completing a booking, the app sends a simulated ticket via email using [Make](https://www.make.com/en) automation.
 
-> **Target audience**: Developers and startups using RedwoodJS who want to explore payment integration in projects involving product or service sales.
-
 ---
 
 ## 🌐 Live Demo
